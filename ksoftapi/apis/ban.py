@@ -1,12 +1,22 @@
+import logging
+from asyncio import CancelledError, sleep
 from itertools import count
+from time import time
 
 from errors import APIError
+from events import BanEvent, UnBanEvent
 from models import BanInfo, PaginatorListing
+
+logger = logging.getLogger('ksoft/bans')
 
 
 class Ban:
     def __init__(self, client):
         self._client = client
+        self._hooks = []
+        self._last_update = time() - 60 * 10
+
+        self._listener_task = None
 
     async def __aiter__(self):
         for page in count(start=1):
@@ -17,6 +27,47 @@ class Ban:
 
             if r['next_page'] is None:
                 break
+
+    async def _ban_checker(self):
+        while self._hooks:
+            try:
+                r = await self.http.get('/bans/updates', params={'timestamp': self._last_update})
+                self._last_update = time()
+                for b in r['data']:
+                    event = BanEvent(**b) if b['active'] else UnBanEvent(**b)
+                    await self._dispatch_ban_event(event)
+            except Exception as exc:
+                logger.error('An error occurred within the ban update loop', exc_info=exc)
+            finally:
+                await sleep(60 * 5)
+
+        try:
+            self._listener_task.cancel()
+        except CancelledError:
+            pass
+
+        self._listener_task = None
+
+    async def _dispatch_ban_event(self, event):
+        logger.debug('Dispatching event of type %s to %d hooks', event.__class__.__name__, len(self._ban_hook))
+        for hook in self._ban_hook:
+            try:
+                await hook(event)
+            except Exception as exc:
+                logger.warning('Event hook "%s" encountered an exception', hook.__name__, exc_info=exc)
+
+    def subscribe(self, hook):
+        if hook not in self._hooks:
+            logger.debug('Registered ban event hook with name %s', hook.__name__)
+            self._hooks.append(hook)
+
+        if len(self._hooks) > 0 and self._listener_task is None:
+            self._listener_task = self._client._loop.create_task(self._ban_checker)
+
+    def unsubscribe(self, hook):
+        if hook in self._hooks:
+            logger.debug('Unregistered ban event hook with name %s', hook.__name__)
+            self._hooks.remove(hook)
 
     async def count(self) -> int:
         r = await self._client.http.get('/bans/list', params={"per_page": 1})
