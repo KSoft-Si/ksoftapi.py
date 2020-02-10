@@ -16,10 +16,6 @@ class Route:
         self.url = (self.BASE + self.path).format(**parameters)
 
     @classmethod
-    def meme(cls, method, path, **parameters):
-        return cls(method, path, 'meme', **parameters)
-
-    @classmethod
     def trola(cls, method, path, **parameters):
         return cls(method, path, 'trola', **parameters)
 

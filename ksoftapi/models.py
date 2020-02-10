@@ -63,9 +63,6 @@ class Tag:
         self.name = kwargs.get('name')
         self.nsfw = kwargs.get('nsfw')
 
-    # def __hash__(self):
-    #     return hash('{}_{}'.format(int(self.nsfw), self.name))
-
     def __str__(self):
         return self.name
 
