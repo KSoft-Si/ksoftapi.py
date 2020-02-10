@@ -13,7 +13,6 @@ import logging
 from collections import namedtuple
 
 from .client import Client
-from .data_objects import *
 from .errors import *
 from .events import *
 
