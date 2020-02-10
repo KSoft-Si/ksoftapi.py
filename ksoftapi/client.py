@@ -7,7 +7,7 @@ import traceback
 from .data_objects import Image, RedditImage, TagCollection, WikiHowImage, Ban, BanIterator
 from .errors import APIError
 from .events import BanEvent, UnBanEvent
-from .http import krequest, Route
+from .http import HttpClient, Route
 
 logger = logging.getLogger()
 
@@ -35,58 +35,50 @@ class Client:
         Your bot client from discord.py
     **loop: asyncio loop
         Your asyncio loop.
-    **low_memory: bool[Optional]
-        Low memory mode, save images to files instead of memory. WIP
-
     """
 
-    def __init__(self, api_key: str, bot=None, loop=asyncio.get_event_loop(), **kwargs):
+    def __init__(self, api_key: str, bot=None, loop=asyncio.get_event_loop()):
         self.api_key = api_key
         self._loop = loop
-        self.http = krequest(global_headers=[
-            ("Authorization", f"NANI {self.api_key}")
-        ], loop=self._loop, lowmem=kwargs.get("lowmem_mode"))
+        self.http = HttpClient(authorization=self.api_key, loop=self._loop)
         self.bot = bot
 
         self._ban_hook = []
         self._last_update = time.time() - 60 * 10
 
         if self.bot is not None:
-            self.bot.loop.create_task(self._ban_updater)
-
-        logger_string = str("NANI") + self.api_key[-4:].rjust(len(self.api_key), "*")
-        logger.info(f"KSOFT API Logging in as {logger_string}")
+            loop.create_task(self._ban_updater)
 
     def register_ban_hook(self, func):
         if func not in self._ban_hook:
-            logger.info("Registered event hook", func.__name__)
+            logger.debug('Registered event hook with name %s', func.__name__)
             self._ban_hook.append(func)
 
     def unregister_ban_hook(self, func):
         if func in self._ban_hook:
-            logger.info("Unregistered event hook", func.__name__)
+            logger.debug('Unregistered event hook with name %s', func.__name__)
             self._ban_hook.remove(func)
 
     async def _dispatch_ban_event(self, event):
-        logger.info('Dispatching event of type %s to %d hooks', event.__class__.__name__, len(self._ban_hook))
+        logger.debug('Dispatching event of type %s to %d hooks', event.__class__.__name__, len(self._ban_hook))
         for hook in self._ban_hook:
-            await hook(event)
+            try:
+                await hook(event)
+            except Exception as exc:
+                logger.warning('Event hook "%s" encountered an exception', func.__name__, exc_info=exc)
 
     async def _ban_updater(self):
         await self.bot.wait_until_ready()
         while not self.bot.is_closed():
             try:
                 if self._ban_hook:
-                    r = await self.http.request(Route.bans("GET", "/updates"), params={"timestamp": self._last_update})
+                    r = await self.http.get('/updates', params={'timestamp': self._last_update}, json=True)
                     self._last_update = time.time()
                     for b in r['data']:
-                        if b['active'] is True:
-                            await self._dispatch_ban_event(BanEvent(**b))
-                        else:
-                            await self._dispatch_ban_event(UnBanEvent(**b))
-            except Exception as e:
-                logger.error("Error in the ban update loop: %s" % e)
-                traceback.print_exc()
+                        event = BanEvent(**b) if b['active'] else UnBanEvent(**b)
+                        await self._dispatch_ban_event(event)
+            except Exception as exc:
+                logger.error('An error occurred within the ban update loop', exc_info=exc)
             finally:
                 await asyncio.sleep(60 * 5)
 
@@ -96,7 +88,6 @@ class Client:
         Pluggable version of Client. Inserts Client directly into your Bot client.
         Called by using `bot.ksoft`
 
-
         Parameters
         -------------
         bot: discord.ext.commands.Bot or discord.ext.commands.AutoShardedBot
@@ -104,11 +95,9 @@ class Client:
         api_key: :class:`str`
             Your ksoft.si api token.
 
-
         .. note::
             Takes the same parameters as :class:`Client` class.
             Usage changes to ``bot.ksoft``. (``bot`` is your bot client variable)
-
         """
         try:
             return bot.ksoft
@@ -118,7 +107,6 @@ class Client:
 
     async def random_image(self, tag: str, nsfw: bool = False) -> Image:
         """|coro|
-
         This function gets a random image from the specified tag.
 
         Parameters
@@ -128,74 +116,52 @@ class Client:
         nsfw: :class:`bool`
             If to display NSFW images.
 
-
         :return: :class:`ksoftapi.data_objects.Image`
-
         """
         g = await self.http.request(Route.meme("GET", "/random-image"), params={"tag": tag, "nsfw": nsfw})
         return Image(**g)
 
     async def random_meme(self) -> RedditImage:
         """|coro|
-
         This function gets a random meme from multiple sources from reddit.
 
-
-
         :return: :class:`ksoftapi.data_objects.RedditImage`
-
         """
         g = await self.http.request(Route.meme("GET", "/random-meme"))
         return RedditImage(**g)
 
     async def random_aww(self) -> RedditImage:
         """|coro|
-
         This function gets a random cute pictures from multiple sources from reddit.
 
-
-
         :return: :class:`ksoftapi.data_objects.RedditImage`
-
         """
         g = await self.http.request(Route.meme("GET", "/random-aww"))
         return RedditImage(**g)
 
     async def random_wikihow(self) -> WikiHowImage:
         """|coro|
-
         This function gets a random WikiHow image.
 
-
-
         :return: :class:`ksoftapi.data_objects.WikiHowImage`
-
         """
         g = await self.http.request(Route.meme("GET", "/random-wikihow"))
         return WikiHowImage(**g)
 
     async def random_reddit(self, subreddit: str) -> RedditImage:
         """|coro|
-
         This function gets a random post from specified subreddit.
 
-
-
         :return: :class:`ksoftapi.data_objects.RedditImage`
-
         """
         g = await self.http.request(Route.meme("GET", "/rand-reddit/{subreddit}", subreddit=subreddit))
         return RedditImage(**g)
 
     async def tags(self) -> TagCollection:
         """|coro|
-
         This function gets all available tags on the api.
 
-
-
         :return: :class:`ksoftapi.data_objects.TagCollection`
-
         """
         g = await self.http.request(Route.meme("GET", "/tags"))
         return TagCollection(**g)
