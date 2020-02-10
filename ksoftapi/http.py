@@ -27,11 +27,11 @@ class Route:
 
     @classmethod
     def bans(cls, method, path, **parameters):
-        return cls(method, path, 'meme', **parameters)
+        return cls(method, path, 'bans', **parameters)
 
     @classmethod
     def trola(cls, method, path, **parameters):
-        return cls(method, path, 'meme', **parameters)
+        return cls(method, path, 'trola', **parameters)
 
 
 class HttpClient(object):

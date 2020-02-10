@@ -8,6 +8,7 @@ from .data_objects import Image, RedditImage, TagCollection, WikiHowImage, Ban, 
 from .errors import APIError
 from .events import BanEvent, UnBanEvent
 from .http import HttpClient, Route
+from .apis import ban
 
 logger = logging.getLogger()
 
@@ -49,6 +50,11 @@ class Client:
         if self.bot is not None:
             loop.create_task(self._ban_updater)
 
+        ##############
+        #    APIS    #
+        ##############
+        self._ban_api = ban.Ban(self)
+
     def register_ban_hook(self, func):
         if func not in self._ban_hook:
             logger.debug('Registered event hook with name %s', func.__name__)
@@ -72,6 +78,7 @@ class Client:
         while not self.bot.is_closed():
             try:
                 if self._ban_hook:
+                    route = Route.bans('GET', '/updates')
                     r = await self.http.get('/updates', params={'timestamp': self._last_update}, json=True)
                     self._last_update = time.time()
                     for b in r['data']:
@@ -105,57 +112,9 @@ class Client:
             bot.ksoft = cls(api_key, bot=bot, *args, **kwargs)
             return bot.ksoft
 
-    async def random_image(self, tag: str, nsfw: bool = False) -> Image:
-        """|coro|
-        This function gets a random image from the specified tag.
-
-        Parameters
-        ------------
-        tag: :class:`str`
-            Image tag from string.
-        nsfw: :class:`bool`
-            If to display NSFW images.
-
-        :return: :class:`ksoftapi.data_objects.Image`
-        """
-        g = await self.http.request(Route.meme("GET", "/random-image"), params={"tag": tag, "nsfw": nsfw})
-        return Image(**g)
-
-    async def random_meme(self) -> RedditImage:
-        """|coro|
-        This function gets a random meme from multiple sources from reddit.
-
-        :return: :class:`ksoftapi.data_objects.RedditImage`
-        """
-        g = await self.http.request(Route.meme("GET", "/random-meme"))
-        return RedditImage(**g)
-
-    async def random_aww(self) -> RedditImage:
-        """|coro|
-        This function gets a random cute pictures from multiple sources from reddit.
-
-        :return: :class:`ksoftapi.data_objects.RedditImage`
-        """
-        g = await self.http.request(Route.meme("GET", "/random-aww"))
-        return RedditImage(**g)
-
-    async def random_wikihow(self) -> WikiHowImage:
-        """|coro|
-        This function gets a random WikiHow image.
-
-        :return: :class:`ksoftapi.data_objects.WikiHowImage`
-        """
-        g = await self.http.request(Route.meme("GET", "/random-wikihow"))
-        return WikiHowImage(**g)
-
-    async def random_reddit(self, subreddit: str) -> RedditImage:
-        """|coro|
-        This function gets a random post from specified subreddit.
-
-        :return: :class:`ksoftapi.data_objects.RedditImage`
-        """
-        g = await self.http.request(Route.meme("GET", "/rand-reddit/{subreddit}", subreddit=subreddit))
-        return RedditImage(**g)
+    @property
+    def bans(self):
+        return self._ban_api
 
     async def tags(self) -> TagCollection:
         """|coro|
@@ -167,44 +126,3 @@ class Client:
         return TagCollection(**g)
 
     # BANS
-    async def bans_add(self, user_id: int, reason: str, proof: str, **kwargs):
-        arg_params = ["mod", "user_name", "user_discriminator", "appeal_possible"]
-        data = {
-            "user": user_id,
-            "reason": reason,
-            "proof": proof
-        }
-        for arg, val in kwargs.items():
-            if arg in arg_params:
-                data.update({arg: val})
-            else:
-                raise ValueError(f"unknown parameter: {arg}")
-        r = await self.http.request(Route.bans("POST", "/add"), data=data)
-        if r.get("success", False) is True:
-            return True
-        else:
-            raise APIError(**r)
-
-    async def bans_check(self, user_id: int) -> bool:
-        r = await self.http.request(Route.bans("GET", "/check"), params={"user": user_id})
-        if r.get("is_banned", None) is not None:
-            return r['is_banned']
-        else:
-            raise APIError(**r)
-
-    async def bans_info(self, user_id: int) -> Ban:
-        r = await self.http.request(Route.bans("GET", "/info"), params={"user": user_id})
-        if r.get("is_ban_active", None) is not None:
-            return Ban(**r)
-        else:
-            raise APIError(**r)
-
-    async def bans_remove(self, user_id: int) -> bool:
-        r = await self.http.request(Route.bans("DELETE", "/remove"), params={"user": user_id})
-        if r.get("done", None) is not None:
-            return True
-        else:
-            raise APIError(**r)
-
-    def ban_get_list_iterator(self):
-        return BanIterator(self, Route.bans("GET", "/list"))
