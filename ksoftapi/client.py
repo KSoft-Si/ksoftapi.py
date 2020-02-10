@@ -2,13 +2,10 @@
 import asyncio
 import logging
 import time
-import traceback
 
-from .data_objects import Image, RedditImage, TagCollection, WikiHowImage, Ban, BanIterator
-from .errors import APIError
 from .events import BanEvent, UnBanEvent
-from .http import HttpClient, Route
-from .apis import ban
+from .http import HttpClient
+from .apis import ban, random
 
 logger = logging.getLogger()
 
@@ -54,6 +51,7 @@ class Client:
         #    APIS    #
         ##############
         self._ban_api = ban.Ban(self)
+        self._random_api = random.Random(self)
 
     def register_ban_hook(self, func):
         if func not in self._ban_hook:
@@ -78,8 +76,7 @@ class Client:
         while not self.bot.is_closed():
             try:
                 if self._ban_hook:
-                    route = Route.bans('GET', '/updates')
-                    r = await self.http.get('/updates', params={'timestamp': self._last_update}, json=True)
+                    r = await self.http.get('/bans/updates', params={'timestamp': self._last_update}, json=True)
                     self._last_update = time.time()
                     for b in r['data']:
                         event = BanEvent(**b) if b['active'] else UnBanEvent(**b)
@@ -116,11 +113,6 @@ class Client:
     def bans(self):
         return self._ban_api
 
-    async def tags(self) -> TagCollection:
-        """|coro|
-        This function gets all available tags on the api.
-
-        :return: :class:`ksoftapi.data_objects.TagCollection`
-        """
-        g = await self.http.request(Route.meme("GET", "/tags"))
-        return TagCollection(**g)
+    @property
+    def random(self):
+        return self._random_api

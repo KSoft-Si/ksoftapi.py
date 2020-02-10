@@ -3,7 +3,6 @@
 import asyncio
 import logging
 import sys
-import traceback
 
 import aiohttp
 
@@ -22,10 +21,6 @@ class Route:
     @classmethod
     def meme(cls, method, path, **parameters):
         return cls(method, path, 'meme', **parameters)
-
-    @classmethod
-    def bans(cls, method, path, **parameters):
-        return cls(method, path, 'bans', **parameters)
 
     @classmethod
     def trola(cls, method, path, **parameters):
