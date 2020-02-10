@@ -1,7 +1,7 @@
 from itertools import count
 
 from errors import APIError
-from models import BanInfo
+from models import BanInfo, PaginatorListing
 
 
 class Ban:
@@ -17,6 +17,14 @@ class Ban:
 
             if r['next_page'] is None:
                 break
+
+    async def count(self) -> int:
+        r = await self._client.http.get('/bans/list', params={"per_page": 1})
+        return r['ban_count']
+
+    async def paginator(self, page: int = 1, per_page: int = 20):
+        r = await self._client.http.get('/bans/list', params={'per_page': per_page, 'page': page})
+        return PaginatorListing(**r)
 
     async def add(self, user_id: int, reason: str, proof: str,
                   mod=None, user_name=None, user_discriminator=None, appeal_possible=None) -> bool:

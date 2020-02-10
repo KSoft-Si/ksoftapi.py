@@ -80,33 +80,3 @@ class BanSimple:
         self.proof = kwargs.get("proof")
         self.moderator_id = kwargs.get("moderator_id")
         self.active = kwargs.get("active")
-
-
-class PaginatorListing:
-    def __init__(self, **kwargs):
-        self.count = kwargs.get("ban_count")
-        self.page_count = kwargs.get("page_count")
-        self.per_page = kwargs.get("per_page")
-        self.page = kwargs.get("page")
-        self.on_page = kwargs.get("on_page")
-        self.next_page = kwargs.get("next_page")
-        self.previous_page = kwargs.get("previous_page")
-        self.data = [Ban(**b) for b in kwargs.get("data")]
-
-
-class BanIterator:
-    def __init__(self, client, route):
-        self._client = client
-        self._route = route
-        self._object_list = []
-
-    async def __aiter__(self):
-        
-
-    async def get_count(self):
-        r = await self._client.http.request(self._route, params={"per_page": 1})
-        return r['ban_count']
-
-    async def paginator(self, page: int = 1, per_page: int = 20):
-        r = await self._client.http.request(self._route, params={"per_page": per_page, "page": page})
-        return PaginatorListing(**r)
