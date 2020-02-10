@@ -1,61 +1,73 @@
+from itertools import count
+
+from errors import APIError
+from models import BanInfo
+
+
 class Ban:
     def __init__(self, client):
         self._client = client
 
     async def __aiter__(self):
-        ...
+        for page in count(start=1):
+            r = await self._client.http.get('/bans/list', params={'page': page})
+
+            for ban in r['data']:
+                yield BanInfo(**ban)
+
+            if r['next_page'] is None:
+                break
 
     async def add(self, user_id: int, reason: str, proof: str,
-                  mod=None, user_name=None, user_discriminator=None, appeal_possible=None):
-        ...
+                  mod=None, user_name=None, user_discriminator=None, appeal_possible=None) -> bool:
+        payload = {
+            'user': user_id,
+            'reason': reason,
+            'proof': proof
+        }
+
+        if mod is not None:
+            payload['mod'] = mod
+
+        if user_name is not None:
+            payload['user_name'] = user_name
+
+        if user_discriminator is not None:
+            payload['user_discriminator'] = user_discriminator
+
+        if appeal_possible is not None:
+            payload['appeal_possible'] = appeal_possible
+
+        r = await self._client.http.post('/bans/add', data=payload)
+
+        if r.get('success', False):
+            return True
+
+        raise APIError(**r)
 
     async def check(self, user_id: int) -> bool:
-        ...
+        r = await self._client.http.get('/bans/check', params={'user': user_id})
 
-    async def info(self, user_id: int):
-        ...
+        if 'is_banned' in r:
+            return r['is_banned']
 
-    async def remove(self, user_id: int):
-        ...
+        raise APIError(**r)
 
-    # async def bans_add(self, user_id: int, reason: str, proof: str, **kwargs):
-    #     arg_params = ["mod", "user_name", "user_discriminator", "appeal_possible"]
-    #     data = {
-    #         "user": user_id,
-    #         "reason": reason,
-    #         "proof": proof
-    #     }
-    #     for arg, val in kwargs.items():
-    #         if arg in arg_params:
-    #             data.update({arg: val})
-    #         else:
-    #             raise ValueError(f"unknown parameter: {arg}")
-    #     r = await self.http.request(Route.bans("POST", "/add"), data=data)
-    #     if r.get("success", False) is True:
-    #         return True
-    #     else:
-    #         raise APIError(**r)
+    async def info(self, user_id: int) -> BanInfo:
+        r = await self._client.http.get('/bans/info', params={'user': user_id})
 
-    # async def bans_check(self, user_id: int) -> bool:
-    #     r = await self.http.request(Route.bans("GET", "/check"), params={"user": user_id})
-    #     if r.get("is_banned", None) is not None:
-    #         return r['is_banned']
-    #     else:
-    #         raise APIError(**r)
+        if 'is_ban_active' in r:
+            return BanInfo(**r)
 
-    # async def bans_info(self, user_id: int) -> Ban:
-    #     r = await self.http.request(Route.bans("GET", "/info"), params={"user": user_id})
-    #     if r.get("is_ban_active", None) is not None:
-    #         return Ban(**r)
-    #     else:
-    #         raise APIError(**r)
+        raise APIError(**r)
 
-    # async def bans_remove(self, user_id: int) -> bool:
-    #     r = await self.http.request(Route.bans("DELETE", "/remove"), params={"user": user_id})
-    #     if r.get("done", None) is not None:
-    #         return True
-    #     else:
-    #         raise APIError(**r)
+    async def remove(self, user_id: int) -> bool:
+        r = await self.http.delete('/bans/remove', params={'user': user_id})
 
-    # def ban_get_list_iterator(self):
-    #     return BanIterator(self, Route.bans("GET", "/list"))
+        if 'done' in r:
+            return r['done']
+
+        if r.get("done", None) is not None:
+            return True
+        else:
+            raise APIError(**r)

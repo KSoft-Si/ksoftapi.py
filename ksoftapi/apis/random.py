@@ -2,21 +2,24 @@ class Random:
     def __init__(self, client):
         self._client = client
 
+    async def image(self, tag: str, nsfw: bool = False):
+        """|coro|
+        This function gets a random image from the specified tag.
+
+        Parameters
+        ------------
+        tag: :class:`str`
+            The tag to fetch images of.
+        nsfw: :class:`bool`
+            Whether to include NSFW images.
+
+        :return: :class:`ksoftapi.data_objects.Image`
+        """
+        g = await self.http.request(Route.meme("GET", "/random-image"), params={"tag": tag, "nsfw": nsfw})
+        return Image(**g)
+
 # async def random_image(self, tag: str, nsfw: bool = False) -> Image:
-#         """|coro|
-#         This function gets a random image from the specified tag.
-
-#         Parameters
-#         ------------
-#         tag: :class:`str`
-#             Image tag from string.
-#         nsfw: :class:`bool`
-#             If to display NSFW images.
-
-#         :return: :class:`ksoftapi.data_objects.Image`
-#         """
-#         g = await self.http.request(Route.meme("GET", "/random-image"), params={"tag": tag, "nsfw": nsfw})
-#         return Image(**g)
+#         
 
 #     async def random_meme(self) -> RedditImage:
 #         """|coro|

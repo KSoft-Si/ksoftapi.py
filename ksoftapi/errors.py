@@ -34,10 +34,9 @@ class InvalidMethod(Exception):
 
 
 class APIError(Exception):
-    def __init__(self, err_msg: str=None, **data):
-        self.message = data.get("message", "No message provided")
-        self.code = data.get("code", 0)
-        if err_msg is not None:
-            err_msg = " | Additional info: {}".format(err_msg)
-        err_msg = "code {}: {}{}".format(self.code, self.message, err_msg)
+    def __init__(self, err_msg: str = None, **data):
+        self.message = data.get('message', 'No message provided')
+        self.code = data.get('code', 0)
+        err_msg = 'code {}: {}{}'.format(self.code, self.message, err_msg or '')
+
         super().__init__(err_msg)

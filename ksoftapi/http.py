@@ -14,8 +14,6 @@ logger = logging.getLogger()
 
 
 class Route:
-    BASE = 'https://api.ksoft.si/'
-
     def __init__(self, method, path, subpath: str = '', **parameters):
         self.path = subpath + path
         self.method = method
@@ -35,39 +33,38 @@ class Route:
 
 
 class HttpClient(object):
+    BASE = 'https://api.ksoft.si'
+
     def __init__(self, authorization, loop=asyncio.get_event_loop(), bot=None):
         self._default_headers = {
             'Authorization': 'NANI ' + authorization,
-            'User-Agent': 'KSoftApi.py/{} (https://github.com/KSoft-Si/ksoftapi.py)'.format(__version__)
+            'User-Agent': 'KSoftApi.py/{} (https://github.com/KSoft-Si/ksoftapi.py)'.format(__version__),
             'X-Powered-By': 'aiohttp {}/Python {}'.format(aiohttp.__version__, sys.version)
         }
         self._bot = bot
         self._session = aiohttp.ClientSession(loop=loop)
 
-    async def _proc_resp(self, response):
-        logger.debug
-        logger.debug(f"Request {response.method}: {response.url}")
-        logger.debug(f"Response headers: {str(response.headers)}")
-        if self.return_json:
-            try:
-                resp = await response.json()
-                logger.debug(f"Response content: {str(resp)}")
-                return resp
-            except Exception:
-                print(traceback.format_exc())
-                print(response)
-                resp = await response.text()
-                logger.debug(f"Response content: {str(resp)}")
-                return {}
-        else:
-            resp = await response.text()
-            logger.debug(f"Response content: {str(resp)}")
-            return resp
-
-    async def get(self, path: str, params=None, headers=None, json=False):
+    async def get(self, path: str, params=None, headers=None, to_json=False):
         merged_headers = {**headers, **self._default_headers} if headers else self._default_headers
-        async with self.session.get(path, params=params, headers=merged_headers) as res:
-            if json:
+        async with self.session.get(self.BASE + path, params=params, headers=merged_headers) as res:
+            if to_json:
+                return await res.json()
+
+            return await res.text()
+
+    async def post(self, path: str, body=None, headers=None, to_json=False):
+        merged_headers = {**headers, **self._default_headers} if headers else self._default_headers
+        payload = {'json': body} if type(body) is dict else {'data': body}
+        async with self.session.post(self.BASE + self.path, **payload, headers=merged_headers) as res:
+            if to_json:
+                return await res.json()
+
+            return await res.text()
+
+    async def delete(self, path: str, params=None, headers=None, to_json=False):
+        merged_headers = {**headers, **self._default_headers} if headers else self._default_headers
+        async with self.session.delete(self.BASE + path, params=params, headers=merged_headers) as res:
+            if to_json:
                 return await res.json()
 
             return await res.text()
@@ -83,28 +80,6 @@ class HttpClient(object):
             return await self.delete(url, params=params, headers=headers)
         else:
             raise InvalidMethod
-
-    async def delete(self, url, params=None, headers=None, verify=True):
-        headers = headers or {}
-        headers.update(self.headers)
-        async with self.session.delete(url, params=params, headers=headers) as resp:
-            r = await self._proc_resp(resp)
-            await resp.release()
-            return r
-
-    async def post(self, url, data=None, json=None, headers=None, verify=True):
-        headers = headers or {}
-        headers.update(self.headers)
-        if json is not None:
-            async with self.session.post(url, json=json, headers=headers) as resp:
-                r = await self._proc_resp(resp)
-                await resp.release()
-                return r
-        else:
-            async with self.session.post(url, data=data, headers=headers) as resp:
-                r = await self._proc_resp(resp)
-                await resp.release()
-                return r
 
     async def download_get(self, url, filename, params=None, headers=None, verify=True):
         headers = headers or {}

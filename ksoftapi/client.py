@@ -124,5 +124,3 @@ class Client:
         """
         g = await self.http.request(Route.meme("GET", "/tags"))
         return TagCollection(**g)
-
-    # BANS
