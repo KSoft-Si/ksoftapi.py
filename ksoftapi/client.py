@@ -26,8 +26,8 @@ class Client:
         self.api_key = api_key
         self.http = HttpClient(authorization=self.api_key, loop=self._loop)
 
-        self._bans_api = bans.Ban(self)
-        self._images_api = images.Image(self)
+        self._bans_api = bans.Bans(self)
+        self._images_api = images.Images(self)
         self._music_api = music.Music(self)
 
     @property

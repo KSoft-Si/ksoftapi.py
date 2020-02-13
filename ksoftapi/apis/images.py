@@ -1,7 +1,7 @@
 from ..models import Image, RedditImage, TagCollection, WikiHowImage
 
 
-class Random:
+class Images:
     def __init__(self, client):
         self._client = client
 

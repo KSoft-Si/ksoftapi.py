@@ -10,7 +10,7 @@ from ..models import BanInfo, PaginatorListing
 logger = logging.getLogger('ksoft/bans')
 
 
-class Ban:
+class Bans:
     def __init__(self, client):
         self._client = client
         self._hooks = []
