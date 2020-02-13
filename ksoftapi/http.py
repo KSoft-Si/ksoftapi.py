@@ -42,7 +42,7 @@ class HttpClient(object):
     async def post(self, path: str, body=None, headers=None, to_json=True):
         merged_headers = {**headers, **self._default_headers} if headers else self._default_headers
         payload = {'json': body} if type(body) is dict else {'data': body}
-        async with self._session.post(self.BASE + self.path, **payload, headers=merged_headers) as res:
+        async with self._session.post(self.BASE + path, **payload, headers=merged_headers) as res:
             if to_json:
                 return await res.json()
 
