@@ -1,6 +1,6 @@
-<img style="object-fit: contain;" src="https://cdn.ksoft.si/images/ksoft-logo-text.png" height="50" width="100%">
+<img align="left" src="https://cdn.ksoft.si/images/Logo1024-W.png" height="50" width="50">
 
-<center><i>Official Python wrapper</i></center>
+# KSoftAPI.py
 
 ## Install
 Installing via pip: `pip install ksoftapi`
