@@ -65,17 +65,18 @@ class PaginatorListing:
 
 class Recommendation:
     def __init__(self, data):
+        youtube = data['youtube']
+        spotify = data['spotify']
+        spotify_album = spotify['album']
+        spotify_artists = spotify['artists']
+
         self.name: str = data['name']
 
-        youtube = data['youtube']
         self.youtube_id: str = youtube['id']
         self.youtube_link: str = youtube['link']
         self.youtube_title: str = youtube['title']
         self.youtube_thumbnail: str = youtube['thumbnail']
 
-        spotify = data['spotify']
-        spotify_album = spotify['album']
-        spotify_artists = spotify['artists']
         self.spotify_id: str = spotify['id']
         self.spotify_name: str = spotify['name']
         self.spotify_link: str = spotify['link']
