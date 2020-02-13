@@ -1,3 +1,5 @@
+from typing import List
+
 from ..errors import NoResults
 from ..models import LyricResult, Recommendation
 
@@ -6,7 +8,7 @@ class Music:
     def __init__(self, client):
         self._client = client
 
-    async def lyrics(self, query: str, text_only: bool = False, limit: int = 10) -> LyricResult:
+    async def lyrics(self, query: str, text_only: bool = False, limit: int = 10) -> List[LyricResult]:
         """|coro|
         Fetches the lyrics for the given query.
 
@@ -28,7 +30,7 @@ class Music:
         ------
         :class:`NoResults`
         """
-        r = await self._client.http.get('/lyrics/search', params={'q': query, 'text_only': text_only, 'limit': limit})
+        r = await self._client.http.get('/lyrics/search', params={'q': query, 'text_only': str(text_only).lower(), 'limit': limit})
         results = r['data']
 
         if not results:
@@ -37,7 +39,7 @@ class Music:
         return [LyricResult(lr) for lr in results]
 
     async def recommendations(self, tracks: list, provider: str, youtube_token: str = None, limit: int = 5,
-                              recommend_type: str = None) -> list:
+                              recommend_type: str = None) -> List[Recommendation]:
         """|coro|
         Fetches a list of tracks that are related to the list of given tracks.
 

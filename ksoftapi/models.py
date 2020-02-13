@@ -33,19 +33,19 @@ class Image:
 
 
 class LyricResult:
-    def __init__(self, **kwargs):
-        self.artist = kwargs.get('artist')
-        self.artist_id = kwargs.get('artist_id')
-        self.album = kwargs.get('album')
-        self.album_ids = kwargs.get('album_ids').split(',')
-        self.album_year = kwargs.get('album_year').split(',')
-        self.name = kwargs.get('name')
-        self.lyrics = kwargs.get('lyrics')
-        self.search_str = kwargs.get('search_str')
-        self.album_art = kwargs.get('album_art')
-        self.popularity = kwargs.get('popularity')
-        self.id = kwargs.get('id')
-        self.search_score = kwargs.get('search_score')
+    def __init__(self, data):
+        self.artist = data.get('artist')
+        self.artist_id = data.get('artist_id')
+        self.album = data.get('album')
+        self.album_ids = data.get('album_ids').split(',')
+        self.album_year = data.get('album_year').split(',')
+        self.name = data.get('name')
+        self.lyrics = data.get('lyrics')
+        self.search_str = data.get('search_str')
+        self.album_art = data.get('album_art')
+        self.popularity = data.get('popularity')
+        self.id = data.get('id')
+        self.search_score = data.get('search_score')
 
 
 class PaginatorListing:
@@ -61,17 +61,17 @@ class PaginatorListing:
 
 
 class Recommendation:
-    def __init__(self, **kwargs):
-        self.name = kwargs['name']
+    def __init__(self, data):
+        self.name = data['name']
 
-        youtube = kwargs['youtube']
+        youtube = data['youtube']
         self.youtube_id = youtube['id']
         self.youtube_link = youtube['link']
         self.youtube_title = youtube['title']
         self.youtube_thumbnail = youtube['thumbnail']
         self.description = youtube['description']
 
-        spotify = kwargs['spotify']
+        spotify = data['spotify']
         spotify_album = spotify['album']
         spotify_artists = spotify['artists']
         self.spotify_id = spotify['id']

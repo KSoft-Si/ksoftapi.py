@@ -31,13 +31,13 @@ class Client:
         self._music_api = music.Music(self)
 
     @property
-    def bans(self):
+    def bans(self) -> bans.Bans:
         return self._bans_api
 
     @property
-    def images(self):
+    def images(self) -> images.Images:
         return self._images_api
 
     @property
-    def music(self):
+    def music(self) -> music.Music:
         return self._music_api
