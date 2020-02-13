@@ -75,7 +75,7 @@ class Music:
             payload['recommend_type'] = recommend_type
 
         r = await self._client.http.post('/music/recommendations', body=payload)
-        results = r['data']
+        results = r['tracks']
 
         if not results:
             raise NoResults
