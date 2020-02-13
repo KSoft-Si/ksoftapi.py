@@ -1,4 +1,4 @@
-from models import Image, RedditImage, TagCollection, WikiHowImage
+from ..models import Image, RedditImage, TagCollection, WikiHowImage
 
 
 class Random:

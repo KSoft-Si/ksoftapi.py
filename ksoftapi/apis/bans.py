@@ -3,9 +3,9 @@ from asyncio import CancelledError, sleep
 from itertools import count
 from time import time
 
-from errors import APIError
-from events import BanEvent, UnBanEvent
-from models import BanInfo, PaginatorListing
+from ..errors import APIError
+from ..events import BanEvent, UnBanEvent
+from ..models import BanInfo, PaginatorListing
 
 logger = logging.getLogger('ksoft/bans')
 
