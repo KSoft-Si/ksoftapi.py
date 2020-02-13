@@ -1,19 +1,25 @@
+<img align="right" src="https://cdn.ksoft.si/images/Logo1024-W.png" height="150" width="150">
+
 # KSoft.Si API
-
 ## Official Python wrapper
-### Install
-You can install using pip: `pip install ksoftapi`
 
-### Example (with discord.py)
+## Install
+Installing via pip is as easy as running the following: `pip install ksoftapi`
 
+## Example Usage:
 ```python
 import ksoftapi
 
-client = ksoftapi.Client(api_key="your_api_key_here")
+kclient = ksoftapi.Client('Your API key here')
 
-@commands.command()
-async def birb(ctx):
-    img = await client.random_image("birb")
-    await ctx.send(img.url)
-    
+async def find_lyrics(query: str):
+    try:
+        results = await kclient.music.lyrics(query)
+    except ksoftapi.NoResults:
+        print('No lyrics found for ' + query)
+    else:
+        first = results[0]
+        print(first.lyrics)
 ```
+
+[Obtain an API key](https://api.ksoft.si/) | [Join the Discord server](https://discordapp.com/invite/gRB2mNh)
