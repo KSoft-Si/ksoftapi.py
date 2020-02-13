@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import asyncio
 
-from .apis import bans, images
+from .apis import bans, images, music
 from .http import HttpClient
 
 
@@ -28,6 +28,7 @@ class Client:
 
         self._bans_api = bans.Ban(self)
         self._images_api = images.Image(self)
+        self._music_api = music.Music(self)
 
     @property
     def bans(self):
@@ -36,3 +37,7 @@ class Client:
     @property
     def images(self):
         return self._images_api
+
+    @property
+    def music(self):
+        return self._music_api
