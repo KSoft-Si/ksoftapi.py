@@ -1,10 +1,9 @@
-<img align="right" src="https://cdn.ksoft.si/images/Logo1024-W.png" height="150" width="150">
+<img style="object-fit: contain;" src="https://cdn.ksoft.si/images/ksoft-logo-text.png" height="50" width="100%">
 
-# KSoft.Si API
-## Official Python wrapper
+<center><i>Official Python wrapper</i></center>
 
 ## Install
-Installing via pip is as easy as running the following: `pip install ksoftapi`
+Installing via pip: `pip install ksoftapi`
 
 ## Example Usage:
 ```python
