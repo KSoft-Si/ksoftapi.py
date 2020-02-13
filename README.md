@@ -1,4 +1,4 @@
-<img src="https://cdn.ksoft.si/images/Logo1024-W.png" height="50" width="50">
+<img align="right" src="https://cdn.ksoft.si/images/Logo1024-W.png" height="50" width="50">
 
 # KSoftAPI.py
 
