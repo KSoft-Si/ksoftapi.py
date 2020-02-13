@@ -75,7 +75,7 @@ class Bans:
 
     async def paginator(self, page: int = 1, per_page: int = 20):
         r = await self._client.http.get('/bans/list', params={'per_page': per_page, 'page': page})
-        return PaginatorListing(**r)
+        return PaginatorListing(r)
 
     async def add(self, user_id: int, reason: str, proof: str,
                   mod=None, user_name=None, user_discriminator=None, appeal_possible=None) -> bool:
@@ -116,7 +116,7 @@ class Bans:
         r = await self._client.http.get('/bans/info', params={'user': user_id})
 
         if 'is_ban_active' in r:
-            return BanInfo(**r)
+            return BanInfo(r)
 
         raise APIError(**r)
 

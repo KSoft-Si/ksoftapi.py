@@ -2,69 +2,69 @@ from typing import Dict, List, Optional
 
 
 class BanInfo:
-    def __init__(self, **kwargs):
-        self.id: str = kwargs.get('id')
-        self.name: str = kwargs.get('name')
-        self.discriminator: str = kwargs.get('discriminator')
-        self.moderator_id: str = kwargs.get('moderator_id')
-        self.reason: str = kwargs.get('reason')
-        self.proof: str = kwargs.get('proof')
-        self.is_ban_active: bool = kwargs.get('is_ban_active')
-        self.can_be_appealed: bool = kwargs.get('can_be_appealed')
-        self.timestamp: str = kwargs.get('timestamp')
-        self.appeal_reason: Optional[str] = kwargs.get('appeal_reason')
-        self.appeal_date: Optional[str] = kwargs.get('appeal_date')
-        self.requested_by: str = kwargs.get('requested_by')
-        self.exists: bool = kwargs.get('exists')
+    def __init__(self, data: dict):
+        self.id: str = data['id']
+        self.name: str = data['name']
+        self.discriminator: str = data['discriminator']
+        self.moderator_id: str = data['moderator_id']
+        self.reason: str = data['reason']
+        self.proof: str = data['proof']
+        self.is_ban_active: bool = data['is_ban_active']
+        self.can_be_appealed: bool = data['can_be_appealed']
+        self.timestamp: str = data['timestamp']
+        self.appeal_reason: Optional[str] = data['appeal_reason']
+        self.appeal_date: Optional[str] = data['appeal_date']
+        self.requested_by: str = data['requested_by']
+        self.exists: bool = data['exists']
 
 
 class BanSimple:
-    def __init__(self, **kwargs):
-        self.id: str = kwargs.get('id')
-        self.reason: str = kwargs.get('reason')
-        self.proof: str = kwargs.get('proof')
-        self.moderator_id: str = kwargs.get('moderator_id')
-        self.active: bool = kwargs.get('is_ban_active')
+    def __init__(self, data: dict):
+        self.id: str = data['id']
+        self.reason: str = data['reason']
+        self.proof: str = data['proof']
+        self.moderator_id: str = data['moderator_id']
+        self.active: bool = data['is_ban_active']
 
 
 class Image:
-    def __init__(self, **kwargs):
-        self.url: str = kwargs.get('url')
-        self.snowflake: str = kwargs.get('snowflake')
-        self.nsfw: bool = kwargs.get('nsfw')
-        self.tag: str = kwargs.get('tag')
+    def __init__(self, data: dict):
+        self.url: str = data['url']
+        self.snowflake: str = data['snowflake']
+        self.nsfw: bool = data['nsfw']
+        self.tag: str = data['tag']
 
 
 class LyricResult:
-    def __init__(self, data):
-        self.artist: str = data.get('artist')
-        self.artist_id: int = data.get('artist_id')
-        self.album: str = data.get('album')
-        self.album_ids: List[str] = data.get('album_ids').split(',')
-        self.album_year: List[str] = data.get('album_year').split(',')
-        self.name: str = data.get('name')
-        self.lyrics: str = data.get('lyrics')
-        self.search_str: str = data.get('search_str')
-        self.album_art: str = data.get('album_art')
-        self.popularity: int = data.get('popularity')
-        self.id: str = data.get('id')
-        self.search_score: float = data.get('search_score')
+    def __init__(self, data: dict):
+        self.artist: str = data['artist']
+        self.artist_id: int = data['artist_id']
+        self.album: str = data['album']
+        self.album_ids: List[str] = data['album_ids'].split(',')
+        self.album_year: List[str] = data['album_year'].split(',')
+        self.name: str = data['name']
+        self.lyrics: str = data['lyrics']
+        self.search_str: str = data['search_str']
+        self.album_art: str = data['album_art']
+        self.popularity: int = data['popularity']
+        self.id: str = data['id']
+        self.search_score: float = data['search_score']
 
 
 class PaginatorListing:
-    def __init__(self, **kwargs):
-        self.count: int = kwargs.get('ban_count')
-        self.page_count: int = kwargs.get('page_count')
-        self.per_page: int = kwargs.get('per_page')
-        self.page: int = kwargs.get('page')
-        self.on_page: int = kwargs.get('on_page')
-        self.next_page: Optional[int] = kwargs.get('next_page')
-        self.previous_page: Optional[int] = kwargs.get('previous_page')
-        self.data: List[BanInfo] = [BanInfo(**ban) for ban in kwargs.get('data')]
+    def __init__(self, data: dict):
+        self.count: int = data['ban_count']
+        self.page_count: int = data['page_count']
+        self.per_page: int = data['per_page']
+        self.page: int = data['page']
+        self.on_page: int = data['on_page']
+        self.next_page: Optional[int] = data['next_page']
+        self.previous_page: Optional[int] = data['previous_page']
+        self.data: List[BanInfo] = [BanInfo(ban) for ban in data['data']]
 
 
 class Recommendation:
-    def __init__(self, data):
+    def __init__(self, data: dict):
         youtube = data['youtube']
         spotify = data['spotify']
         spotify_album = spotify['album']
@@ -90,34 +90,34 @@ class Recommendation:
 
 
 class RedditImage:
-    def __init__(self, **kwargs):
-        self.author: str = kwargs.get('author')
-        self.title: str = kwargs.get('title')
-        self.image_url: str = kwargs.get('image_url')
-        self.source: str = kwargs.get('source')
-        self.subreddit: str = kwargs.get('subreddit')
-        self.upvotes: int = kwargs.get('upvotes')
-        self.downvotes: int = kwargs.get('downvotes')
-        self.comments: int = kwargs.get('comments')
-        self.created_at: int = kwargs.get('created_at')
-        self.nsfw: bool = kwargs.get('nsfw')
+    def __init__(self, data: dict):
+        self.author: str = data.get('author')
+        self.title: str = data.get('title')
+        self.image_url: str = data.get('image_url')
+        self.source: str = data.get('source')
+        self.subreddit: str = data.get('subreddit')
+        self.upvotes: int = data.get('upvotes')
+        self.downvotes: int = data.get('downvotes')
+        self.comments: int = data.get('comments')
+        self.created_at: int = data.get('created_at')
+        self.nsfw: bool = data.get('nsfw')
 
 
 class Tag:
-    def __init__(self, **kwargs):
-        self.name: str = kwargs.get('name')
-        self.nsfw: bool = kwargs.get('nsfw')
+    def __init__(self, data: dict):
+        self.name: str = data.get('name')
+        self.nsfw: bool = data.get('nsfw')
 
     def __str__(self):
         return self.name
 
 
 class TagCollection:
-    def __init__(self, **kwargs):
-        self.raw_models: List[dict] = kwargs.get('models')
-        self.models: List[Tag] = [Tag(**t) for t in self.raw_models]
-        self.sfw_tags: List[str] = kwargs.get('tags')
-        self.nsfw_tags: List[str] = kwargs.get('nsfw_tags', [])
+    def __init__(self, data: dict):
+        self.raw_models: List[dict] = data.get('models')
+        self.models: List[Tag] = [Tag(t) for t in self.raw_models]
+        self.sfw_tags: List[str] = data.get('tags')
+        self.nsfw_tags: List[str] = data.get('nsfw_tags', [])
 
     def __len__(self):
         return len(self.models)
@@ -140,8 +140,8 @@ class TagCollection:
 
 
 class WikiHowImage:
-    def __init__(self, **kwargs):
-        self.url: str = kwargs.get('url')
-        self.title: str = kwargs.get('title')
-        self.nsfw: bool = kwargs.get('nsfw')
-        self.article_url: str = kwargs.get('article_url')
+    def __init__(self, data: dict):
+        self.url: str = data.get('url')
+        self.title: str = data.get('title')
+        self.nsfw: bool = data.get('nsfw')
+        self.article_url: str = data.get('article_url')

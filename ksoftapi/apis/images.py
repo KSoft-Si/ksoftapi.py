@@ -19,7 +19,7 @@ class Images:
         :return: :class:`ksoftapi.data_objects.Image`
         """
         r = await self._client.http.get('/images/random-image', params={'tag': tag, 'nsfw': nsfw})
-        return Image(**r)
+        return Image(r)
 
     async def random_meme(self) -> RedditImage:
         """|coro|
@@ -46,7 +46,7 @@ class Images:
         :return: :class:`ksoftapi.data_objects.WikiHowImage`
         """
         r = await self._client.http.get('/images/random-wikihow')
-        return WikiHowImage(**r)
+        return WikiHowImage(r)
 
     async def random_reddit(self, subreddit: str) -> RedditImage:
         """|coro|
@@ -55,7 +55,7 @@ class Images:
         :return: :class:`ksoftapi.data_objects.RedditImage`
         """
         r = await self._client.http.get('/images/rand-reddit/{}'.format(subreddit))
-        return RedditImage(**r)
+        return RedditImage(r)
 
     async def tags(self) -> TagCollection:
         """|coro|
@@ -64,4 +64,4 @@ class Images:
         :return: :class:`ksoftapi.data_objects.TagCollection`
         """
         r = await self._client.http.get('/images/tags')
-        return TagCollection(**r)
+        return TagCollection(r)
