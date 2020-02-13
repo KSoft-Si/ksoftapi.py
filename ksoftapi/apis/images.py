@@ -28,7 +28,7 @@ class Images:
         :return: :class:`ksoftapi.data_objects.RedditImage`
         """
         r = await self._client.http.get('/images/random-meme')
-        return RedditImage(**r)
+        return RedditImage(r)
 
     async def random_aww(self) -> RedditImage:
         """|coro|
@@ -37,7 +37,7 @@ class Images:
         :return: :class:`ksoftapi.data_objects.RedditImage`
         """
         r = await self._client.http.get('/images/random-aww')
-        return RedditImage(**r)
+        return RedditImage(r)
 
     async def random_wikihow(self) -> WikiHowImage:
         """|coro|

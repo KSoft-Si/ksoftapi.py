@@ -4,7 +4,7 @@ from itertools import count
 from time import time
 
 from ..errors import APIError
-from ..events import BanEvent, UnBanEvent
+from ..events import BanUpdateEvent
 from ..models import BanInfo, PaginatorListing
 
 logger = logging.getLogger('ksoft/bans')
@@ -23,7 +23,7 @@ class Bans:
             r = await self._client.http.get('/bans/list', params={'page': page})
 
             for ban in r['data']:
-                yield BanInfo(**ban)
+                yield BanInfo(ban)
 
             if r['next_page'] is None:
                 break
@@ -34,8 +34,7 @@ class Bans:
                 r = await self.http.get('/bans/updates', params={'timestamp': self._last_update})
                 self._last_update = time()
                 for b in r['data']:
-                    event = BanEvent(**b) if b['active'] else UnBanEvent(**b)
-                    await self._dispatch_ban_event(event)
+                    await self._dispatch_ban_event(BanUpdateEvent(b))
             except Exception as exc:
                 logger.error('An error occurred within the ban update loop', exc_info=exc)
             finally:
@@ -102,7 +101,7 @@ class Bans:
         if 'success' in r:
             return r['success']
 
-        raise APIError(**r)
+        raise APIError(r)
 
     async def check(self, user_id: int) -> bool:
         r = await self._client.http.get('/bans/check', params={'user': user_id})
@@ -110,7 +109,7 @@ class Bans:
         if 'is_banned' in r:
             return r['is_banned']
 
-        raise APIError(**r)
+        raise APIError(r)
 
     async def info(self, user_id: int) -> BanInfo:
         r = await self._client.http.get('/bans/info', params={'user': user_id})
@@ -118,7 +117,7 @@ class Bans:
         if 'is_ban_active' in r:
             return BanInfo(r)
 
-        raise APIError(**r)
+        raise APIError(r)
 
     async def remove(self, user_id: int) -> bool:
         r = await self.http.delete('/bans/remove', params={'user': user_id})
@@ -126,4 +125,4 @@ class Bans:
         if 'done' in r:
             return r['done']
 
-        raise APIError(**r)
+        raise APIError(r)

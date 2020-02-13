@@ -20,7 +20,6 @@ class Client:
     **loop: asyncio loop
         Your asyncio loop.
     """
-
     def __init__(self, api_key: str, loop=None):
         self._loop = loop or asyncio.get_event_loop()
         self.api_key = api_key
