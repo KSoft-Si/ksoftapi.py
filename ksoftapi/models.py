@@ -32,6 +32,22 @@ class Image:
         self.tag = kwargs.get('tag')
 
 
+class LyricResult:
+    def __init__(self, **kwargs):
+        self.artist = kwargs.get('artist')
+        self.artist_id = kwargs.get('artist_id')
+        self.album = kwargs.get('album')
+        self.album_ids = kwargs.get('album_ids').split(',')
+        self.album_year = kwargs.get('album_year').split(',')
+        self.name = kwargs.get('name')
+        self.lyrics = kwargs.get('lyrics')
+        self.search_str = kwargs.get('search_str')
+        self.album_art = kwargs.get('album_art')
+        self.popularity = kwargs.get('popularity')
+        self.id = kwargs.get('id')
+        self.search_score = kwargs.get('search_score')
+
+
 class PaginatorListing:
     def __init__(self, **kwargs):
         self.count = kwargs.get('ban_count')
@@ -42,6 +58,32 @@ class PaginatorListing:
         self.next_page = kwargs.get('next_page')
         self.previous_page = kwargs.get('previous_page')
         self.data = [BanInfo(**ban) for ban in kwargs.get('data')]
+
+
+class Recommendation:
+    def __init__(self, **kwargs):
+        self.name = kwargs['name']
+
+        youtube = kwargs['youtube']
+        self.youtube_id = youtube['id']
+        self.youtube_link = youtube['link']
+        self.youtube_title = youtube['title']
+        self.youtube_thumbnail = youtube['thumbnail']
+        self.description = youtube['description']
+
+        spotify = kwargs['spotify']
+        spotify_album = spotify['album']
+        spotify_artists = spotify['artists']
+        self.spotify_id = spotify['id']
+        self.spotify_name = spotify['name']
+        self.spotify_link = spotify['link']
+        self.spotify_album_name = spotify_album['name']
+        self.spotify_album_art = spotify_album['album_art']
+        self.spotify_album_link = spotify_album['link']
+        self.spotify_artists = [
+            {'name': artist['name'], 'link': artist['link']}
+            for artist in spotify_artists
+        ]
 
 
 class RedditImage:

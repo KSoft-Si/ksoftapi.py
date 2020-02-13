@@ -99,8 +99,8 @@ class Ban:
 
         r = await self._client.http.post('/bans/add', data=payload)
 
-        if r.get('success', False):
-            return True
+        if 'success' in r:
+            return r['success']
 
         raise APIError(**r)
 
@@ -126,7 +126,4 @@ class Ban:
         if 'done' in r:
             return r['done']
 
-        if r.get("done", None) is not None:
-            return True
-        else:
-            raise APIError(**r)
+        raise APIError(**r)
