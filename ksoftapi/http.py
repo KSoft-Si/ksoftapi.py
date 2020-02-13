@@ -4,23 +4,18 @@ import sys
 
 import aiohttp
 
-from . import __version__
+from . import __version__  # pylint: disable=R0401
 
 logger = logging.getLogger()
 
 
-class Route:
-    def __init__(self, method, path, subpath: str = '', **parameters):
-        self.path = subpath + path
-        self.method = method
-        self.url = (self.BASE + self.path).format(**parameters)
-
-    @classmethod
-    def trola(cls, method, path, **parameters):
-        return cls(method, path, 'trola', **parameters)
+# class Route:
+#     @classmethod
+#     def trola(cls, method, path, **parameters):
+#         return cls(method, path, 'trola', **parameters)
 
 
-class HttpClient(object):
+class HttpClient:
     BASE = 'https://api.ksoft.si'
 
     def __init__(self, authorization, loop):
@@ -41,7 +36,7 @@ class HttpClient(object):
 
     async def post(self, path: str, body=None, headers=None, to_json=True):
         merged_headers = {**headers, **self._default_headers} if headers else self._default_headers
-        payload = {'json': body} if type(body) is dict else {'data': body}
+        payload = {'json': body} if isinstance(body, dict) else {'data': body}
         async with self._session.post(self.BASE + path, **payload, headers=merged_headers) as res:
             if to_json:
                 return await res.json()
@@ -56,45 +51,4 @@ class HttpClient(object):
 
             return await res.text()
 
-    #  TODO:
-    #   - Perhaps add status code checks?
-
-    # async def download_get(self, url, filename, params=None, headers=None, verify=True):
-    #     headers = headers or {}
-    #     headers.update(self.headers)
-    #     async with self.session.get(url, params=params, headers=headers) as response:
-    #         if response.status != 200:
-    #             raise Forbidden
-    #         with open(filename, 'wb') as f_handle:
-    #             while True:
-    #                 chunk = await response.content.read(1024)
-    #                 if not chunk:
-    #                     break
-    #                 f_handle.write(chunk)
-    #         await response.release()
-
-    # async def download_post(self, url, filename, data=None, json=None, headers=None, verify=True):
-    #     headers = headers or {}
-    #     headers.update(self.headers)
-    #     if json is not None:
-    #         async with self.session.post(url, json=json, headers=headers) as response:
-    #             if response.status != 200:
-    #                 raise Forbidden
-    #             with open(filename, 'wb') as f_handle:
-    #                 while True:
-    #                     chunk = await response.content.read(1024)
-    #                     if not chunk:
-    #                         break
-    #                     f_handle.write(chunk)
-    #             await response.release()
-    #     else:
-    #         async with self.session.post(url, data=data, headers=headers) as response:
-    #             if response.status != 200:
-    #                 raise Forbidden
-    #             with open(filename, 'wb') as f_handle:
-    #                 while True:
-    #                     chunk = await response.content.read(1024)
-    #                     if not chunk:
-    #                         break
-    #                     f_handle.write(chunk)
-    #             await response.release()
+    # - Perhaps add status code checks?

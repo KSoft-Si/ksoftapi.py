@@ -32,7 +32,7 @@ class Bans:
         while self._hooks:
             try:
                 r = await self.http.get('/bans/updates', params={'timestamp': self._last_update})
-                self._last_update = time()
+                self._last_update = r['current_timestamp']
                 for b in r['data']:
                     await self._dispatch_ban_event(BanUpdateEvent(b))
             except Exception as exc:

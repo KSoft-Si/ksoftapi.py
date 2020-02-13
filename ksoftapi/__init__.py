@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
-"""KSoft.Si API Wrapper with discord.py integration
+"""
+KSoft.Si API Wrapper with discord.py integration
 """
 
 __title__ = 'ksoftapi'
@@ -13,8 +14,8 @@ import logging
 from collections import namedtuple
 
 from .client import Client
-from .errors import *
-from .events import *
+from .errors import APIError, Forbidden, NoResults
+from .events import BanUpdateEvent
 
 VersionInfo = namedtuple('VersionInfo', 'major minor micro releaselevel serial')
 
