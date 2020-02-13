@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import asyncio
 
-from .apis import ban, random
+from .apis import bans, images
 from .http import HttpClient
 
 
@@ -26,13 +26,13 @@ class Client:
         self.api_key = api_key
         self.http = HttpClient(authorization=self.api_key, loop=self._loop)
 
-        self._ban_api = ban.Ban(self)
-        self._random_api = random.Random(self)
+        self._bans_api = bans.Ban(self)
+        self._images_api = images.Image(self)
 
     @property
     def bans(self):
-        return self._ban_api
+        return self._bans_api
 
     @property
-    def random(self):
-        return self._random_api
+    def images(self):
+        return self._images_api
