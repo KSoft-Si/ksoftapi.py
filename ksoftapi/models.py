@@ -1,3 +1,6 @@
+from typing import Dict, List 
+
+
 class BanInfo:
     def __init__(self, **kwargs):
         self.id = kwargs.get('id')
@@ -34,18 +37,18 @@ class Image:
 
 class LyricResult:
     def __init__(self, data):
-        self.artist = data.get('artist')
-        self.artist_id = data.get('artist_id')
-        self.album = data.get('album')
-        self.album_ids = data.get('album_ids').split(',')
-        self.album_year = data.get('album_year').split(',')
-        self.name = data.get('name')
-        self.lyrics = data.get('lyrics')
-        self.search_str = data.get('search_str')
-        self.album_art = data.get('album_art')
-        self.popularity = data.get('popularity')
-        self.id = data.get('id')
-        self.search_score = data.get('search_score')
+        self.artist: str = data.get('artist')
+        self.artist_id: int = data.get('artist_id')
+        self.album: str = data.get('album')
+        self.album_ids: List[str] = data.get('album_ids').split(',')
+        self.album_year: List[str] = data.get('album_year').split(',')
+        self.name: str = data.get('name')
+        self.lyrics: str = data.get('lyrics')
+        self.search_str: str = data.get('search_str')
+        self.album_art: str = data.get('album_art')
+        self.popularity: int = data.get('popularity')
+        self.id: str = data.get('id')
+        self.search_score: float = data.get('search_score')
 
 
 class PaginatorListing:
@@ -62,25 +65,25 @@ class PaginatorListing:
 
 class Recommendation:
     def __init__(self, data):
-        self.name = data['name']
+        self.name: str = data['name']
 
         youtube = data['youtube']
-        self.youtube_id = youtube['id']
-        self.youtube_link = youtube['link']
-        self.youtube_title = youtube['title']
-        self.youtube_thumbnail = youtube['thumbnail']
-        self.description = youtube['description']
+        self.youtube_id: str = youtube['id']
+        self.youtube_link: str = youtube['link']
+        self.youtube_title: str = youtube['title']
+        self.youtube_thumbnail: str = youtube['thumbnail']
+        self.description: str = youtube['description']
 
         spotify = data['spotify']
         spotify_album = spotify['album']
         spotify_artists = spotify['artists']
-        self.spotify_id = spotify['id']
-        self.spotify_name = spotify['name']
-        self.spotify_link = spotify['link']
-        self.spotify_album_name = spotify_album['name']
-        self.spotify_album_art = spotify_album['album_art']
-        self.spotify_album_link = spotify_album['link']
-        self.spotify_artists = [
+        self.spotify_id: str = spotify['id']
+        self.spotify_name: str = spotify['name']
+        self.spotify_link: str = spotify['link']
+        self.spotify_album_name: str = spotify_album['name']
+        self.spotify_album_art: str = spotify_album['album_art']
+        self.spotify_album_link: str = spotify_album['link']
+        self.spotify_artists: Dict[str, str] = [
             {'name': artist['name'], 'link': artist['link']}
             for artist in spotify_artists
         ]
