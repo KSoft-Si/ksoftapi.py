@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import asyncio
 
-from .apis import bans, images, music
+from .apis import bans, images, kumo, music
 from .http import HttpClient
 
 
@@ -27,6 +27,7 @@ class Client:
 
         self._bans_api = bans.Bans(self)
         self._images_api = images.Images(self)
+        self._kumo_api = kumo.Kumo(self)
         self._music_api = music.Music(self)
 
     @property
@@ -36,6 +37,10 @@ class Client:
     @property
     def images(self) -> images.Images:
         return self._images_api
+
+    @property
+    def kumo(self) -> kumo.Kumo:
+        return self._kumo_api
 
     @property
     def music(self) -> music.Music:

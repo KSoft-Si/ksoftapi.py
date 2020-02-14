@@ -33,7 +33,7 @@ class Music:
         ------
         :class:`NoResults`
         """
-        r = await self._client.http.get('/lyrics/search', params={'q': query, 'text_only': str(text_only).lower(), 'limit': limit,
+        r = await self._client.http.get('/lyrics/search', params={'q': query, 'text_only': text_only, 'limit': limit,
                                                                   'clean_up': clean_up})
         results = r['data']
 
