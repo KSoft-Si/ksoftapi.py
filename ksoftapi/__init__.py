@@ -6,7 +6,7 @@ KSoft.Si API Wrapper with discord.py integration
 
 __title__ = 'ksoftapi'
 __author__ = 'AndyTempel'
-__license__ = 'MIT'
+__license__ = 'GNU'
 __copyright__ = 'Copyright 2018-2020 AndyTempel'
 __version__ = '0.2.0a'
 
