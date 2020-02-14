@@ -1,4 +1,7 @@
+from typing import List, Union
+
 from ..errors import NoResults
+from ..models import Location
 
 
 class Kumo:
@@ -6,7 +9,7 @@ class Kumo:
         self._client = client
 
     async def gis(self, location: str, fast: bool = False, more: bool = False, map_zoom: int = 12,
-                  include_map: bool = False):
+                  include_map: bool = False) -> Union[Location, List[Location]]:
         """|coro|
         Provides information and co-ordinates for the given location, and optionally, an image.
 
@@ -25,7 +28,8 @@ class Kumo:
 
         Returns
         -------
-        :class:`Location`
+        Union[:class:`Location`, List[:class:`Location`]]
+            A list of :class:`Location` if ``more`` is True, otherwise a :class:`Location`.
 
         Raises
         ------
@@ -36,3 +40,9 @@ class Kumo:
 
         if r['code'] == 404:
             raise NoResults
+
+        result = r['data']
+        if isinstance(result, list):
+            return [Location(r) for r in result]
+
+        return Location(result)
