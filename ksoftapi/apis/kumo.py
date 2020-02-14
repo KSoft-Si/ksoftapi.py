@@ -1,29 +1,38 @@
+from ..errors import NoResults
+
+
 class Kumo:
     def __init__(self, client):
         self._client = client
 
-    async def gis(self, location: str, fast: bool, more: bool, map_zoom: int, include_map: bool):
+    async def gis(self, location: str, fast: bool = False, more: bool = False, map_zoom: int = 12,
+                  include_map: bool = False):
         """|coro|
-        Fetches the lyrics for the given query.
+        Provides information and co-ordinates for the given location, and optionally, an image.
 
         Parameters
         ------------
-        query: str
-            The lyrics search query.
-        text_only: bool
-            Whether to search for the query within the lyrics.
-        clean_up: bool
-            Whether the API should attempt to clean-up garbage in the query
-            For example: strings like [Official Music Video], [Lyric Video] etc.
-        limit: int
-            The maximum number of results that should be returned.
+        location: str
+            The location to get information of.
+        fast: bool
+            Whether to sacrifice information for a faster response.
+        more: bool
+            Whether to return more than one location.
+        map_zoom: int
+            Sets the zoom level of the map. This option is ignored if fast is False.
+        include_map: bool
+            Whether to include an image of the map.
 
         Returns
         -------
-        list
-            A list of :class:`LyricResult`
+        :class:`Location`
 
         Raises
         ------
         :class:`NoResults`
         """
+        r = await self.http.get('/kumo/gis', params={'q': location, 'fast': fast, 'more': more, 'map_zoom': map_zoom,
+                                                     'include_map': include_map})
+
+        if r['code'] == 404:
+            raise NoResults

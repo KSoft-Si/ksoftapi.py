@@ -3,7 +3,6 @@ from asyncio import CancelledError, sleep
 from itertools import count
 from time import time
 
-from ..errors import APIError
 from ..events import BanUpdateEvent
 from ..models import BanInfo, PaginatorListing
 
@@ -97,32 +96,16 @@ class Bans:
             payload['appeal_possible'] = appeal_possible
 
         r = await self._client.http.post('/bans/add', data=payload)
-
-        if 'success' in r:
-            return r['success']
-
-        raise APIError(r)
+        return r['success']
 
     async def check(self, user_id: int) -> bool:
         r = await self._client.http.get('/bans/check', params={'user': user_id})
-
-        if 'is_banned' in r:
-            return r['is_banned']
-
-        raise APIError(r)
+        return r['is_banned']
 
     async def info(self, user_id: int) -> BanInfo:
         r = await self._client.http.get('/bans/info', params={'user': user_id})
-
-        if 'is_ban_active' in r:
-            return BanInfo(r)
-
-        raise APIError(r)
+        return BanInfo(r)
 
     async def remove(self, user_id: int) -> bool:
         r = await self.http.delete('/bans/remove', params={'user': user_id})
-
-        if 'done' in r:
-            return r['done']
-
-        raise APIError(r)
+        return r['done']
