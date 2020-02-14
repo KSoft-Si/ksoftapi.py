@@ -8,7 +8,7 @@ class Music:
     def __init__(self, client):
         self._client = client
 
-    async def lyrics(self, query: str, text_only: bool = False, limit: int = 10) -> List[LyricResult]:
+    async def lyrics(self, query: str, text_only: bool = False, clean_up: bool = True, limit: int = 10) -> List[LyricResult]:
         """|coro|
         Fetches the lyrics for the given query.
 
@@ -30,7 +30,8 @@ class Music:
         ------
         :class:`NoResults`
         """
-        r = await self._client.http.get('/lyrics/search', params={'q': query, 'text_only': str(text_only).lower(), 'limit': limit})
+        r = await self._client.http.get('/lyrics/search', params={'q': query, 'text_only': str(text_only).lower(), 'limit': limit,
+                                                                  'clean_up': clean_up})
         results = r['data']
 
         if not results:
