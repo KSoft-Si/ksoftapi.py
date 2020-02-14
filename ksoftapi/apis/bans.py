@@ -3,6 +3,7 @@ from asyncio import CancelledError, sleep
 from itertools import count
 from time import time
 
+from ..errors import NoResults
 from ..events import BanUpdateEvent
 from ..models import BanInfo, PaginatorListing
 
@@ -103,9 +104,30 @@ class Bans:
         return r['is_banned']
 
     async def info(self, user_id: int) -> BanInfo:
+        """|coro|
+
+        Parameters
+        ----------
+        user_id: :class:`int`
+            The ID of the user to get ban information for.
+
+        Returns
+        -------
+        :class:`BanInfo`
+
+        Raises
+        ------
+        :class:`NoResults`
+        """
         r = await self._client.http.get('/bans/info', params={'user': user_id})
+
+        if 'code' in r and r['code'] == 404:
+            raise NoResults
+
         return BanInfo(r)
 
-    async def remove(self, user_id: int) -> bool:
-        r = await self.http.delete('/bans/remove', params={'user': user_id})
+    async def delete(self, user_id: int, force: bool = False) -> bool:
+        r = await self.http.delete('/bans/delete', params={'user': user_id, 'force': force})
         return r['done']
+
+    # TODO: DOCUMENTATION
