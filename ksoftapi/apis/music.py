@@ -18,6 +18,9 @@ class Music:
             The lyrics search query.
         text_only: bool
             Whether to search for the query within the lyrics.
+        clean_up: bool
+            Whether the API should attempt to clean-up garbage in the query
+            For example: strings like [Official Music Video], [Lyric Video] etc.
         limit: int
             The maximum number of results that should be returned.
 
