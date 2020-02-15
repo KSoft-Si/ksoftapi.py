@@ -35,8 +35,8 @@ class Kumo:
         ------
         :class:`NoResults`
         """
-        r = await self.http.get('/kumo/gis', params={'q': location, 'fast': fast, 'more': more, 'map_zoom': map_zoom,
-                                                     'include_map': include_map})
+        r = await self._client.http.get('/kumo/gis', params={'q': location, 'fast': fast, 'more': more, 'map_zoom': map_zoom,
+                                                             'include_map': include_map})
 
         if r['code'] == 404:
             raise NoResults

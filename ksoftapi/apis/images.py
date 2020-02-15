@@ -88,7 +88,8 @@ class Images:
         :class:`NoResults`
             If the subreddit wasn't found.
         """
-        r = await self._client.http.get('/images/rand-reddit/{}'.format(subreddit))
+        r = await self._client.http.get('/images/rand-reddit/{}'.format(subreddit),
+                                        params={'remove_nsfw': remove_nsfw, 'span': span})
 
         if r['code'] == 404:
             raise NoResults

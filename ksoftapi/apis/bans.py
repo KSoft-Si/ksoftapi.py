@@ -3,7 +3,7 @@ from asyncio import CancelledError, sleep
 from itertools import count
 from time import time
 
-from ..errors import NoResults
+from ..errors import APIError, NoResults
 from ..events import BanUpdateEvent
 from ..models import BanInfo, PaginatorListing
 
@@ -31,12 +31,13 @@ class Bans:
     async def _ban_checker(self):
         while self._hooks:
             try:
-                r = await self.http.get('/bans/updates', params={'timestamp': self._last_update})
+                r = await self._client.http.get('/bans/updates', params={'timestamp': self._last_update})
+            except APIError as exc:
+                logger.error('The API responded with an error while fetching ban updates.', exc_info=exc)
+            else:
                 self._last_update = r['current_timestamp']
                 for b in r['data']:
                     await self._dispatch_ban_event(BanUpdateEvent(b))
-            except Exception as exc:
-                logger.error('An error occurred within the ban update loop', exc_info=exc)
             finally:
                 await sleep(60 * 5)
 
@@ -48,11 +49,11 @@ class Bans:
         self._listener_task = None
 
     async def _dispatch_ban_event(self, event):
-        logger.debug('Dispatching event of type %s to %d hooks', event.__class__.__name__, len(self._ban_hook))
-        for hook in self._ban_hook:
+        logger.debug('Dispatching event of type %s to %d hooks', event.__class__.__name__, len(self._hooks))
+        for hook in self._hooks:
             try:
                 await hook(event)
-            except Exception as exc:
+            except Exception as exc:  # pylint: disable=W0703
                 logger.warning('Event hook "%s" encountered an exception', hook.__name__, exc_info=exc)
 
     def subscribe(self, hook):
@@ -127,7 +128,7 @@ class Bans:
         return BanInfo(r)
 
     async def delete(self, user_id: int, force: bool = False) -> bool:
-        r = await self.http.delete('/bans/delete', params={'user': user_id, 'force': force})
+        r = await self._client.http.delete('/bans/delete', params={'user': user_id, 'force': force})
         return r['done']
 
-    # TODO: DOCUMENTATION
+    # SOONTM: DOCUMENTATION
