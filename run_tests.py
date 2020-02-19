@@ -8,7 +8,7 @@ from pylint.reporters import text
 
 def test_flake8():
     style_guide = legacy.get_style_guide()
-    report = style_guide.check_files(['lavalink'])
+    report = style_guide.check_files(['ksoftapi'])
     statistics = report.get_statistics('E')
     failed = bool(statistics)
 

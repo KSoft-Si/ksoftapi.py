@@ -1,1 +1,1 @@
-from . import bans, images, kumo, music
+from . import bans, images, kumo, music  # noqa: F401

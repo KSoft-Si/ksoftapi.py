@@ -13,9 +13,9 @@ __version__ = '0.2.0a'
 import logging
 from collections import namedtuple
 
-from .client import Client
-from .errors import APIError, Forbidden, NoResults
-from .events import BanUpdateEvent
+from .client import Client  # noqa: F401
+from .errors import APIError, Forbidden, NoResults  # noqa: F401
+from .events import BanUpdateEvent  # noqa: F401
 
 VersionInfo = namedtuple('VersionInfo', 'major minor micro releaselevel serial')
 
