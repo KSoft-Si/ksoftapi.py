@@ -27,6 +27,9 @@ class HttpClient:
         }
         self._session = aiohttp.ClientSession(loop=loop)
 
+    async def close(self):
+        await self._session.close()
+
     async def _validate_response(self, response: aiohttp.ClientResponse):
         if response.status >= 500:
             raise APIError(response.status, 'The API encountered an internal server error.')

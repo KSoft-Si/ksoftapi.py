@@ -30,6 +30,9 @@ class Client:
         self._kumo_api = kumo.Kumo(self)
         self._music_api = music.Music(self)
 
+    def __del__(self):
+        self._loop.run_until_complete(self.http.close())
+
     @property
     def bans(self) -> bans.Bans:
         return self._bans_api
