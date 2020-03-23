@@ -12,8 +12,7 @@ def test_flake8():
     statistics = report.get_statistics('E')
     failed = bool(statistics)
 
-    if not failed:
-        print('OK')
+    return failed
 
 
 def test_pylint():
@@ -29,17 +28,35 @@ def test_pylint():
     out = reporter.out.getvalue()
 
     failed = bool(out)
-    msg = 'OK' if not failed else out
-    print(msg)
 
     return failed
 
 
-if __name__ == '__main__':
-    print('-- flake8 test --')
-    flake_failed = test_flake8()
-    print('-- pylint test --')
-    pylint_failed = test_pylint()
+def test_import():
+    try:
+        import ksoftapi
+    except:
+        return True
 
-    if flake_failed or pylint_failed:
+
+if __name__ == '__main__':
+    tests = [test_flake8, test_pylint, test_import]
+    fail_count = 0
+
+    for test in tests:
+        test_name = test.__name__
+        formatted_test_name = f'-- {test_name[5:]} test --'
+        print(formatted_test_name)
+
+        failed = test()
+        if failed:
+            print('Failed')
+            fail_count += 1
+        else:
+            print('Passed')
+
+    print(f'Fails: {fail_count}')
+    if fail_count == 0:
+        sys.exit(0)
+    else:
         sys.exit(1)
