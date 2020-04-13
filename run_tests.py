@@ -1,4 +1,5 @@
 import sys
+import traceback
 from io import StringIO
 
 import pylint.lint as pylint
@@ -35,7 +36,8 @@ def test_pylint():
 def test_import():
     try:
         import ksoftapi
-    except:
+    except Exception as e:
+        traceback.print_exc()
         return True
 
 
@@ -55,7 +57,6 @@ if __name__ == '__main__':
         else:
             print('Passed')
 
-    print(f'Fails: {fail_count}')
     if fail_count == 0:
         sys.exit(0)
     else:
