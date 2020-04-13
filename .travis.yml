@@ -9,7 +9,7 @@ notifications:
 
 
 install:
-  - pip install flake8 pylint
+  - pip install -r requirements.txt flake8 pylint
 
 script:
   - python run_tests.py
