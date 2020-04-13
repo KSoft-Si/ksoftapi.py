@@ -35,6 +35,16 @@ class Image:
         self.tag: str = data['tag']
 
 
+class Location:
+    def __init__(self, data: dict):
+        self.address: str = data['address']
+        self.lat: float = data['lat']
+        self.lon: float = data['lon']
+        self.bounding_box: List[str] = data['bounding_box']
+        self.type: List[str] = data['type']
+        self.map: Optional[str] = data.get('map')
+
+
 class LyricResult:
     def __init__(self, data: dict):
         self.artist: str = data['artist']

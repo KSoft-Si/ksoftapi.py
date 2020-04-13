@@ -1,6 +1,6 @@
-import ksoftapi
-
 from setuptools import setup
+
+import ksoftapi
 
 
 def get_requirements():
@@ -19,16 +19,15 @@ with open('README.md') as f:
 
 setup(
     name='ksoftapi',
-    packages=['ksoftapi'],
+    packages=['ksoftapi', 'ksoftapi.apis'],
     version=version,
-    description='KSoft.Si API Wrapper, customised for use in discord.py',
+    description='The official KSoft.SI API Wrapper.',
     long_description=readme,
     author='AndyTempel',
     author_email='support@ksoft.si',
     url='https://github.com/KSoft-Si/ksoftapi.py',
     download_url=f'https://github.com/KSoft-Si/ksoftapi.py/archive/{version}.tar.gz',
     keywords=['ksoftapi'],
-    include_package_data=True,
     install_requires=get_requirements(),
     classifiers=[
         'Development Status :: 3 - Alpha',

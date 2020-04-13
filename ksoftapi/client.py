@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import asyncio
+from asyncio import CancelledError
 
-from .apis import bans, images, music
+from .apis import bans, images, kumo, music
 from .http import HttpClient
 
 
@@ -27,7 +28,21 @@ class Client:
 
         self._bans_api = bans.Bans(self)
         self._images_api = images.Images(self)
+        self._kumo_api = kumo.Kumo(self)
         self._music_api = music.Music(self)
+
+    async def close(self):
+        """
+        Closes the client. This action will prevent
+        the client from making any more requests to the API.
+        """
+        if self._bans_api._listener_task is not None:
+            try:
+                self._bans_api._listener_task.cancel()
+            except CancelledError:
+                pass
+
+        await self.http.close()
 
     @property
     def bans(self) -> bans.Bans:
@@ -36,6 +51,10 @@ class Client:
     @property
     def images(self) -> images.Images:
         return self._images_api
+
+    @property
+    def kumo(self) -> kumo.Kumo:
+        return self._kumo_api
 
     @property
     def music(self) -> music.Music:

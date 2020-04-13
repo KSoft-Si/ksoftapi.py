@@ -8,7 +8,7 @@ class Music:
     def __init__(self, client):
         self._client = client
 
-    async def lyrics(self, query: str, text_only: bool = False, limit: int = 10) -> List[LyricResult]:
+    async def lyrics(self, query: str, text_only: bool = False, clean_up: bool = True, limit: int = 10) -> List[LyricResult]:
         """|coro|
         Fetches the lyrics for the given query.
 
@@ -18,6 +18,9 @@ class Music:
             The lyrics search query.
         text_only: bool
             Whether to search for the query within the lyrics.
+        clean_up: bool
+            Whether the API should attempt to clean-up garbage in the query
+            For example: strings like [Official Music Video], [Lyric Video] etc.
         limit: int
             The maximum number of results that should be returned.
 
@@ -30,7 +33,8 @@ class Music:
         ------
         :class:`NoResults`
         """
-        r = await self._client.http.get('/lyrics/search', params={'q': query, 'text_only': str(text_only).lower(), 'limit': limit})
+        r = await self._client.http.get('/lyrics/search', params={'q': query, 'text_only': text_only, 'limit': limit,
+                                                                  'clean_up': clean_up})
         results = r['data']
 
         if not results:
