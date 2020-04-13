@@ -1,4 +1,4 @@
-<img align="right" src="https://cdn.ksoft.si/images/Logo1024-W.png" height="70" width="70">
+<img align="right" src="https://cdn.ksoft.si/images/ksoft-logo-text.png">
 
 # KSoftAPI.py
 *The official Python Wrapper*
