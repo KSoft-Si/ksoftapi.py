@@ -21,7 +21,7 @@ class HttpClient:
 
     def __init__(self, authorization, loop):
         self._default_headers = {
-            'Authorization': 'NANI ' + authorization,
+            'Authorization': 'Bearer ' + authorization,
             'User-Agent': 'KSoftApi.py/{} (https://github.com/KSoft-Si/ksoftapi.py)'.format(__version__),
             'X-Powered-By': 'aiohttp {}/Python {}'.format(aiohttp.__version__, sys.version)
         }
