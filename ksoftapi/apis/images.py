@@ -27,7 +27,7 @@ class Images:
         """
         r = await self._client.http.get('/images/random-image', params={'tag': tag, 'nsfw': nsfw})
 
-        if r['code'] == 404:
+        if r.get('code', 200) == 404:
             raise NoResults
 
         return Image(r)
