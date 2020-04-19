@@ -23,6 +23,7 @@ setup(
     version=version,
     description='The official KSoft.SI API Wrapper.',
     long_description=readme,
+    long_description_content_type="text/markdown",
     author='AndyTempel',
     author_email='support@ksoft.si',
     url='https://github.com/KSoft-Si/ksoftapi.py',
