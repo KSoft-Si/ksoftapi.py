@@ -45,9 +45,10 @@ class HttpClient:
     async def get(self, path: str, params=None, headers=None, to_json=True):
         merged_headers = {**headers, **self._default_headers} if headers else self._default_headers
 
-        for key, val in params.items():
-            if isinstance(val, bool):
-                params[key] = str(val).lower()
+        if params:
+            for key, val in params.items():
+                if isinstance(val, bool):
+                    params[key] = str(val).lower()
 
         async with self._session.get(self.BASE + path, params=params, headers=merged_headers) as res:
             await self._validate_response(res)
