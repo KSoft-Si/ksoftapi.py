@@ -8,7 +8,7 @@ __title__ = 'ksoftapi'
 __author__ = 'AndyTempel'
 __license__ = 'GNU'
 __copyright__ = 'Copyright 2018-2020 AndyTempel'
-__version__ = '0.2.0a'
+__version__ = '0.2.1a'
 
 import logging
 from collections import namedtuple
@@ -19,7 +19,7 @@ from .events import BanUpdateEvent  # noqa: F401
 
 VersionInfo = namedtuple('VersionInfo', 'major minor micro releaselevel serial')
 
-version_info = VersionInfo(major=0, minor=2, micro=0, releaselevel='alpha', serial=0)
+version_info = VersionInfo(major=0, minor=2, micro=1, releaselevel='alpha', serial=0)
 
 try:
     from logging import NullHandler
