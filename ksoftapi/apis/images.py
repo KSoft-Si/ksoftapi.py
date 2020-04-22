@@ -91,7 +91,7 @@ class Images:
         r = await self._client.http.get('/images/rand-reddit/{}'.format(subreddit),
                                         params={'remove_nsfw': remove_nsfw, 'span': span})
 
-        if r['code'] == 404:
+        if r.get('code', 200) == 404:
             raise NoResults
 
         return RedditImage(r)
