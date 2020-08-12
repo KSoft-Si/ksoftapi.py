@@ -1,7 +1,7 @@
 from typing import List, Union
 
 from ..errors import NoResults
-from ..models import Location
+from ..models import Location, Weather
 
 
 class Kumo:
@@ -46,3 +46,43 @@ class Kumo:
             return [Location(r) for r in result]
 
         return Location(result)
+
+    async def weather(self, location: str, report_type: str = "currently", units: str = "auto",
+                      lang: str = "en", icon_pack: str = "original") -> Union[Weather, List[Weather]]:
+        """|coro|
+        Provides weather information for the given location.
+
+        Parameters
+        ------------
+        location: str
+            The location to get the weather from.
+        report_type: str
+            The type of report to get. Defaults to current if not set.
+        units: str
+            The units the information should be shown in.
+        lang: str
+            The language the information should be shown in. Defaults to english if not set.
+        icon_pack: str
+            Select the icon pack. Defaults to original if not set.
+
+        Returns
+        -------
+        Union[:class:`Weather`, List[:class:`Weather`]]
+            A list of :class:`Weather` if ``more`` is True, otherwise a :class:`Weather`.
+
+        Raises
+        ------
+        :class:`NoResults`
+        """
+
+        r = await self._client.http.get('/kumo/weather/{}'.format(report_type),
+                                        params={"q": location, "units": units, "lang": lang, "icons": icon_pack})
+
+        if r.get('code', 200) == 404:
+            raise NoResults
+
+        result = r['data']
+        if isinstance(result, list):
+            return [Weather(r) for r in result]
+
+        return Weather(result)

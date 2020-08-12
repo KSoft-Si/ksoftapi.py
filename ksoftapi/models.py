@@ -44,6 +44,48 @@ class Location:
         self.type: List[str] = data['type']
         self.map: Optional[str] = data.get('map')
 
+class LocationSimple:
+    def __init__(self, data: dict):
+        self.address: str = data['address']
+        self.lat: float = data['lat']
+        self.lon: float = data['lon']
+
+
+class WeatherAlert:
+    def __init__(self, data: dict):
+        self.title: str = data['title']
+        self.regions: List[str] = data['regions']
+        self.severity: str = data['severity']
+        self.time: int = data['time']
+        self.expires: int = data['expires']
+        self.description: str = data['description']
+        self.uri: str = data['uri']
+
+class Weather:
+    def __init__(self, data: dict):
+        self.summary: str = data['summary']
+        self.icon: str = data['icon']
+        self.precip_intensity: int = data['precipIntensity']
+        self.precip_probability: int = data['precipProbability']
+        self.temperature: float = data['temperature']
+        self.apparent_temperature: float = data['apparentTemperature']
+        self.dew_point: float = data['dewPoint']
+        self.humidity: float = data['humidity']
+        self.pressure: float = data['pressure']
+        self.wind_speed: float = data['windSpeed']
+        self.wind_gust: float = data['windGust']
+        self.wind_bearing: int = data['windBearing']
+        self.cloud_cover: float = data['cloudCover']
+        self.uv_index: int = data['uvIndex']
+        self.visibility: float = data['visibility']
+        self.ozone: float = data['ozone']
+        self.sunrise_time: int = data['sunriseTime']
+        self.sunset_time: int = data['sunsetTime']
+        self.icon_url: str = data['icon_url']
+        self.alerts: List[WeatherAlert] = [WeatherAlert(alert) for alert in data['alerts']] or None
+        self.units: str = data['units']
+        self.location: LocationSimple = LocationSimple(data['location'])
+
 
 class LyricResult:
     def __init__(self, data: dict):
