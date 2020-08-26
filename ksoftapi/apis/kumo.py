@@ -48,7 +48,7 @@ class Kumo:
         return Location(result)
 
     async def basic_weather(self, location: str, report_type: str = "currently", units: str = "auto",
-                      lang: str = "en", icon_pack: str = "original") -> Union[Weather, List[Weather]]:
+                            lang: str = "en", icon_pack: str = "original") -> Union[Weather, List[Weather]]:
         """|coro|
         Provides weather information for the given location.
 
@@ -88,7 +88,7 @@ class Kumo:
         return Weather(result)
 
     async def advanced_weather(self, latitude: float, longitude: float, report_type: str = "currently", units: str = "auto",
-                      lang: str = "en", icon_pack: str = "original") -> Union[Weather, List[Weather]]:
+                               lang: str = "en", icon_pack: str = "original") -> Union[Weather, List[Weather]]:
         """|coro|
         Provides weather information for the given location.
 

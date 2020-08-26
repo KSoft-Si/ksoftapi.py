@@ -44,6 +44,7 @@ class Location:
         self.type: List[str] = data['type']
         self.map: Optional[str] = data.get('map')
 
+
 class LocationSimple:
     def __init__(self, data: dict):
         self.address: str = data['address']
@@ -60,6 +61,7 @@ class WeatherAlert:
         self.expires: int = data['expires']
         self.description: str = data['description']
         self.uri: str = data['uri']
+
 
 class Weather:
     def __init__(self, data: dict):
