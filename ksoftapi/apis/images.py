@@ -107,7 +107,58 @@ class Images:
         r = await self._client.http.get('/images/tags')
         return TagCollection(r)
 
-    # MISSING:
-    #  - /image/{snowflake}
-    #  - /tags/{search}
-    #  - /random-nsfw
+    async def get_image(self, snowflake: str) -> Image:
+        """|coro|
+        This function gets an image based on it's snowflake.
+
+        Parameters
+        ----------
+        snowflake: :class:`str`
+            The image snowflake (unique ID)
+
+        Returns
+        -------
+        :class:`Image`
+        """
+        r = await self._client.http.get(f'/images/image/{snowflake}')
+
+        if r.get('code', 200) == 404:
+            raise NoResults
+
+        return Image(r)
+
+    async def search_tags(self, search: str) -> TagCollection:
+        """
+        This function searchs for tags.
+
+        Parameters
+        ----------
+        search: :class:`str`
+            The search query.
+
+        Returns
+        -------
+        :class:`TagCollection`
+        """
+        r = await self._client.http.get('/images/tags/{}'.format(search))
+
+        if r.get('code', 200) == 404:
+            raise NoResults
+
+        return TagCollection(r)
+
+    async def random_nsfw(self, gifs: bool = False) -> RedditImage:
+        """|coro|
+        This function gets an random nsfw image.
+
+        Parameters
+        ----------
+        gifs: :class:`bool`
+            If gifs should be retrivied instead of images.
+
+        Returns
+        -------
+        :class:`RedditImage`
+        """
+        r = await self._client.http.get('/images/random-nsfw', params={'gifs': gifs})
+        return RedditImage(r)
