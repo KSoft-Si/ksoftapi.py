@@ -59,6 +59,7 @@ class LyricResult:
         self.popularity: int = data['popularity']
         self.id: str = data['id']
         self.search_score: float = data['search_score']
+        self.url: str = data['url']
 
 
 class PaginatorListing:
