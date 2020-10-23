@@ -120,7 +120,7 @@ class Images:
         -------
         :class:`Image`
         """
-        r = await self._client.http.get(f'/images/image/{snowflake}')
+        r = await self._client.http.get('/images/image/{}'.format(snowflake))
 
         if r.get('code', 200) == 404:
             raise NoResults
@@ -149,12 +149,12 @@ class Images:
 
     async def random_nsfw(self, gifs: bool = False) -> RedditImage:
         """|coro|
-        This function gets an random nsfw image.
+        This function gets a random nsfw image.
 
         Parameters
         ----------
         gifs: :class:`bool`
-            If gifs should be retrivied instead of images.
+            If gifs should be returned instead of images.
 
         Returns
         -------
