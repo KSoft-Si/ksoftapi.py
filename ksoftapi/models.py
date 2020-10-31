@@ -109,6 +109,7 @@ class Recommendation:
 
         self.raw: dict = data
 
+
 class RedditImage:
     def __init__(self, data: dict):
         self.author: str = data.get('author')
