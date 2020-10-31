@@ -16,6 +16,7 @@ class BanInfo:
         self.appeal_date: Optional[str] = data['appeal_date']
         self.requested_by: str = data['requested_by']
         self.exists: bool = data['exists']
+        self.raw: dict = data
 
 
 class BanSimple:
@@ -25,6 +26,7 @@ class BanSimple:
         self.proof: str = data['proof']
         self.moderator_id: str = data['moderator_id']
         self.active: bool = data['is_ban_active']
+        self.raw: dict = data
 
 
 class Image:
@@ -33,6 +35,7 @@ class Image:
         self.snowflake: str = data['snowflake']
         self.nsfw: bool = data['nsfw']
         self.tag: str = data['tag']
+        self.raw: dict = data
 
 
 class Location:
@@ -43,6 +46,8 @@ class Location:
         self.bounding_box: List[str] = data['bounding_box']
         self.type: List[str] = data['type']
         self.map: Optional[str] = data.get('map')
+
+        self.raw: dict = data
 
 
 class LyricResult:
@@ -61,6 +66,8 @@ class LyricResult:
         self.search_score: float = data['search_score']
         self.url: str = data['url']
 
+        self.raw: dict = data
+
 
 class PaginatorListing:
     def __init__(self, data: dict):
@@ -72,6 +79,7 @@ class PaginatorListing:
         self.next_page: Optional[int] = data['next_page']
         self.previous_page: Optional[int] = data['previous_page']
         self.data: List[BanInfo] = [BanInfo(ban) for ban in data['data']]
+        self.raw: dict = data
 
 
 class Recommendation:
@@ -99,6 +107,7 @@ class Recommendation:
             for artist in spotify_artists
         ]
 
+        self.raw: dict = data
 
 class RedditImage:
     def __init__(self, data: dict):
@@ -113,11 +122,15 @@ class RedditImage:
         self.created_at: int = data.get('created_at')
         self.nsfw: bool = data.get('nsfw')
 
+        self.raw: dict = data
+
 
 class Tag:
     def __init__(self, data: dict):
         self.name: str = data.get('name')
         self.nsfw: bool = data.get('nsfw')
+
+        self.raw: dict = data
 
     def __str__(self):
         return self.name
@@ -129,6 +142,8 @@ class TagCollection:
         self.models: List[Tag] = [Tag(t) for t in self.raw_models]
         self.sfw_tags: List[str] = data.get('tags')
         self.nsfw_tags: List[str] = data.get('nsfw_tags', [])
+
+        self.raw: dict = data
 
     def __len__(self):
         return len(self.models)
@@ -156,3 +171,5 @@ class WikiHowImage:
         self.title: str = data.get('title')
         self.nsfw: bool = data.get('nsfw')
         self.article_url: str = data.get('article_url')
+
+        self.raw: dict = data
