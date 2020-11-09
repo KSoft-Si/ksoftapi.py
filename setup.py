@@ -30,6 +30,7 @@ setup(
     download_url=f'https://github.com/KSoft-Si/ksoftapi.py/archive/{version}.tar.gz',
     keywords=['ksoftapi'],
     install_requires=get_requirements(),
+    python_requires='>=3.6',
     classifiers=[
         'Development Status :: 3 - Alpha',
         'License :: OSI Approved :: GNU General Public License (GPL)',
