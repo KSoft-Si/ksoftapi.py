@@ -39,8 +39,9 @@ class HttpClient:
 
             if json.get('error', False):
                 code = json.get('code', response.status)
-                message = json.get('message', '<No message>')
-                raise APIError(code, message)
+                if code != 404:
+                    message = json.get('message', '<No message>')
+                    raise APIError(code, message)
 
     async def get(self, path: str, params=None, headers=None, to_json=True):
         merged_headers = {**headers, **self._default_headers} if headers else self._default_headers
