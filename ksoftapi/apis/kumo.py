@@ -100,5 +100,4 @@ class Kumo:
         if r.get('code', 200) == 404:
             raise NoResults
 
-        result = r['data']
-        return Currency(result)
+        return Currency(r)
