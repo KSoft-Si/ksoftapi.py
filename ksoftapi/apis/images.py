@@ -128,7 +128,7 @@ class Images:
         return Image(r)
 
     async def search_tags(self, search: str) -> TagCollection:
-        """
+        """|coro|
         This function searchs for tags.
 
         Parameters

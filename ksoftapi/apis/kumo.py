@@ -1,7 +1,7 @@
 from typing import List, Union
 
 from ..errors import NoResults
-from ..models import Location
+from ..models import Location, IPInfo, Currency
 
 
 class Kumo:
@@ -46,3 +46,59 @@ class Kumo:
             return [Location(r) for r in result]
 
         return Location(result)
+
+    async def geoip(self, ip: str):
+        """|coro|
+        Gets location data from the IP address.
+
+        Parameters
+        ----------
+        ip: :class:`str`
+            The ip address.
+
+        Returns
+        -------
+        :class:`IPInfo`
+
+        Raises
+        ------
+        :class:`NoResults`
+        """
+        r = await self._client.http.get('/kumo/geoip', params={'ip': ip})
+
+        if r.get('code', 200) == 404:
+            raise NoResults
+
+        result = r['data']
+        return IPInfo(result)
+
+    async def currency(self, from_: str, to: str, value: str):
+        """|coro|
+        Convert a value from one currency to another.
+
+        Parameters
+        ----------
+        from_: :class:`str`
+            The original currency of the value.
+            Should match https://en.wikipedia.org/wiki/ISO_4217#Active_codes
+        to: :class:`str`
+            The currency to convert to.
+            Should match https://en.wikipedia.org/wiki/ISO_4217#Active_codes
+        value: :class:`str`
+            The value you want to convert.
+
+        Returns
+        -------
+        :class:`Currency`
+
+        Raises
+        ------
+        :class:`NoResults`
+        """
+        r = await self._client.http.get('/kumo/currency', params={'from': from_, 'to': to, 'value': value})
+
+        if r.get('code', 200) == 404:
+            raise NoResults
+
+        result = r['data']
+        return Currency(result)
