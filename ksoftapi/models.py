@@ -46,7 +46,6 @@ class Location:
         self.bounding_box: List[str] = data['bounding_box']
         self.type: List[str] = data['type']
         self.map: Optional[str] = data.get('map')
-
         self.raw: dict = data
 
 
@@ -65,7 +64,6 @@ class LyricResult:
         self.id: str = data['id']
         self.search_score: float = data['search_score']
         self.url: str = data['url']
-
         self.raw: dict = data
 
 
@@ -106,7 +104,6 @@ class Recommendation:
             {'name': artist['name'], 'link': artist['link']}
             for artist in spotify_artists
         ]
-
         self.raw: dict = data
 
 
@@ -122,7 +119,6 @@ class RedditImage:
         self.comments: int = data.get('comments')
         self.created_at: int = data.get('created_at')
         self.nsfw: bool = data.get('nsfw')
-
         self.raw: dict = data
 
 
@@ -130,7 +126,6 @@ class Tag:
     def __init__(self, data: dict):
         self.name: str = data.get('name')
         self.nsfw: bool = data.get('nsfw')
-
         self.raw: dict = data
 
     def __str__(self):
@@ -143,7 +138,6 @@ class TagCollection:
         self.models: List[Tag] = [Tag(t) for t in self.raw_models]
         self.sfw_tags: List[str] = data.get('tags')
         self.nsfw_tags: List[str] = data.get('nsfw_tags', [])
-
         self.raw: dict = data
 
     def __len__(self):
@@ -172,5 +166,27 @@ class WikiHowImage:
         self.title: str = data.get('title')
         self.nsfw: bool = data.get('nsfw')
         self.article_url: str = data.get('article_url')
-
         self.raw: dict = data
+
+
+class IPInfo:
+    def __init__(self, data: dict):
+        self.city: str = data.get('city')
+        self.continent_code: str = data.get('continent_code')
+        self.continent_name: str = data.get('continent_name')
+        self.country_code: str = data.get('country_code')
+        self.country_name: str = data.get('country_name')
+        self.dma_code: str = data.get('dma_code')
+        self.latitude: float = data.get('latitude')
+        self.longitude: float = data.get('longitude')
+        self.postal_code: str = data.get('postal_code')
+        self.region: str = data.get('region')
+        self.timezone: str = data.get('time_zone')
+        self.apis: Dict[str, str] = data.get('apis')
+        self.raw: dict = data
+
+
+class Currency:
+    def __init__(self, data: dict):
+        self.value: float = data.get('value')
+        self.pretty: str = data.get('pretty')
