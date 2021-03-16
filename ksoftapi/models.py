@@ -61,6 +61,8 @@ class LyricResult:
         self.search_str: str = data['search_str']
         self.album_art: str = data['album_art']
         self.popularity: int = data['popularity']
+        self.singalong: List[dict] = data['singalong']
+        self.meta: dict = data['meta']
         self.id: str = data['id']
         self.search_score: float = data['search_score']
         self.url: str = data['url']
@@ -93,6 +95,7 @@ class Recommendation:
         self.youtube_link: str = youtube['link']
         self.youtube_title: str = youtube['title']
         self.youtube_thumbnail: str = youtube['thumbnail']
+        self.youtube_description: str = youtube['description']
 
         self.spotify_id: str = spotify['id']
         self.spotify_name: str = spotify['name']
@@ -119,6 +122,7 @@ class RedditImage:
         self.comments: int = data.get('comments')
         self.created_at: int = data.get('created_at')
         self.nsfw: bool = data.get('nsfw')
+        self.awards: int = data.get('awards')
         self.raw: dict = data
 
 
@@ -190,3 +194,4 @@ class Currency:
     def __init__(self, data: dict):
         self.value: float = data.get('value')
         self.pretty: str = data.get('pretty')
+        self.raw: dict = data
