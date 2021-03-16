@@ -1,6 +1,21 @@
 from typing import Dict, List, Optional
 
 
+class Proxy:
+    def __init__(self, data):
+        self.__dict__.update(data)
+
+    def __repr__(self):
+        attributes = (f'{k}={v}' for k, v in self.__dict__.items() if not k.startswith('_'))
+        return 'Proxy({})'.format(', '.join(attributes))
+
+    def __iter__(self):
+        return iter(self.__dict__.items())
+
+    def __len__(self):
+        return len(self.__dict__)
+
+
 class BanInfo:
     def __init__(self, data: dict):
         self.id: str = data['id']
@@ -62,7 +77,7 @@ class LyricResult:
         self.album_art: str = data['album_art']
         self.popularity: int = data['popularity']
         self.singalong: List[dict] = data['singalong']
-        self.meta: dict = data['meta']
+        self.meta: Proxy = Proxy(data['meta'])
         self.id: str = data['id']
         self.search_score: float = data['search_score']
         self.url: str = data['url']
@@ -186,7 +201,7 @@ class IPInfo:
         self.postal_code: str = data.get('postal_code')
         self.region: str = data.get('region')
         self.timezone: str = data.get('time_zone')
-        self.apis: Dict[str, str] = data.get('apis')
+        self.apis: Proxy = Proxy(data.get('apis'))
         self.raw: dict = data
 
 
