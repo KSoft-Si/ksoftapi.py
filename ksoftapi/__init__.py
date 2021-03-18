@@ -8,7 +8,7 @@ __title__ = 'ksoftapi'
 __author__ = 'AndyTempel'
 __license__ = 'GNU'
 __copyright__ = 'Copyright 2018-2020 AndyTempel'
-__version__ = '0.3.3a'
+__version__ = '0.4.0'
 
 import logging
 from collections import namedtuple
