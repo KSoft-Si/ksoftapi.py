@@ -110,7 +110,6 @@ class Recommendation:
         self.youtube_link: str = youtube['link']
         self.youtube_title: str = youtube['title']
         self.youtube_thumbnail: str = youtube['thumbnail']
-        self.youtube_description: str = youtube['description']
 
         self.spotify_id: str = spotify['id']
         self.spotify_name: str = spotify['name']
