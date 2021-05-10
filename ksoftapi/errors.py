@@ -2,6 +2,7 @@
 class BadRequest(Exception):
     pass
 
+
 class NoResults(Exception):
     pass
 
