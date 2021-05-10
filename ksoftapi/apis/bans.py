@@ -122,8 +122,8 @@ class Bans:
         """
         r = await self._client.http.get('/bans/info', params={'user': user_id})
 
-        if 'code' in r and r['code'] == 404:
-            raise NoResults
+        if r.get('code', 200) == 404:
+            raise NoResults(r['message'])
 
         return BanInfo(r)
 
