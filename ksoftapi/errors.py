@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+class BadRequest(Exception):
+    pass
+
+
 class NoResults(Exception):
     pass
 

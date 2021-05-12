@@ -38,7 +38,7 @@ class Music:
         results = r['data']
 
         if not results:
-            raise NoResults('Song not found.')
+            raise NoResults
 
         return [LyricResult(lr) for lr in results]
 
@@ -82,6 +82,6 @@ class Music:
         results = r['tracks']
 
         if not results:
-            raise NoResults('No recommendations.')
+            raise NoResults
 
         return [Recommendation(r) for r in results]

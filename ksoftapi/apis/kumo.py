@@ -39,7 +39,7 @@ class Kumo:
                                                              'include_map': include_map})
 
         if r.get('code', 200) == 404:
-            raise NoResults(r['message'])
+            raise NoResults
 
         result = r['data']
         if isinstance(result, list):
@@ -67,7 +67,7 @@ class Kumo:
         r = await self._client.http.get('/kumo/geoip', params={'ip': ip})
 
         if r.get('code', 200) == 404:
-            raise NoResults(r['message'])
+            raise NoResults
 
         result = r['data']
         return IPInfo(result)

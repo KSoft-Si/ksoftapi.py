@@ -1,4 +1,4 @@
-from ..errors import NoResults
+from ..errors import NoResults, BadRequest
 from ..models import Image, RedditImage, TagCollection, WikiHowImage
 
 
@@ -28,7 +28,7 @@ class Images:
         r = await self._client.http.get('/images/random-image', params={'tag': tag, 'nsfw': nsfw})
 
         if r.get('code', 200) == 404:
-            raise NoResults(r['message'])
+            raise NoResults
 
         return Image(r)
 
@@ -91,8 +91,11 @@ class Images:
         r = await self._client.http.get('/images/rand-reddit/{}'.format(subreddit),
                                         params={'remove_nsfw': remove_nsfw, 'span': span})
 
-        if r.get('code', 200) == 404:
-            raise NoResults(r['message'])
+        if r.get('code', 200) == 125:
+            raise BadRequest(r['message'])
+
+        if r.get('code', 200) in (404, 130):
+            raise NoResults
 
         return RedditImage(r)
 
@@ -123,7 +126,7 @@ class Images:
         r = await self._client.http.get('/images/image/{}'.format(snowflake))
 
         if r.get('code', 200) == 404:
-            raise NoResults(r['message'])
+            raise NoResults
 
         return Image(r)
 
@@ -143,7 +146,7 @@ class Images:
         r = await self._client.http.get('/images/tags/{}'.format(search))
 
         if r.get('code', 200) == 404:
-            raise NoResults(r['message'])
+            raise NoResults
 
         return TagCollection(r)
 
