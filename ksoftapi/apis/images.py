@@ -28,7 +28,7 @@ class Images:
         r = await self._client.http.get('/images/random-image', params={'tag': tag, 'nsfw': nsfw})
 
         if r.get('code', 200) == 404:
-            raise NoResults
+            raise NoResults(r['message'])
 
         return Image(r)
 
@@ -92,7 +92,7 @@ class Images:
                                         params={'remove_nsfw': remove_nsfw, 'span': span})
 
         if r.get('code', 200) == 404:
-            raise NoResults
+            raise NoResults(r['message'])
 
         return RedditImage(r)
 
@@ -123,7 +123,7 @@ class Images:
         r = await self._client.http.get('/images/image/{}'.format(snowflake))
 
         if r.get('code', 200) == 404:
-            raise NoResults
+            raise NoResults(r['message'])
 
         return Image(r)
 
@@ -143,7 +143,7 @@ class Images:
         r = await self._client.http.get('/images/tags/{}'.format(search))
 
         if r.get('code', 200) == 404:
-            raise NoResults
+            raise NoResults(r['message'])
 
         return TagCollection(r)
 
