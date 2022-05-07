@@ -22,4 +22,4 @@ async def find_lyrics(query: str):
         print(first.lyrics)
 ```
 
-[Obtain an API key](https://api.ksoft.si/) | [Join the Discord server](https://discordapp.com/invite/gRB2mNh)
+[Obtain an API key](https://api.ksoft.si/) | [Join the Discord server](https://discord.gg/7bqdQd4)
