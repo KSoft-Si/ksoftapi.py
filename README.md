@@ -4,7 +4,10 @@
 *The official Python Wrapper for Ksoft API*
 
 ## Install
-Installing via pip: `pip install ksoftapi`
+Installing via pip: 
+```
+pip install ksoftapi
+```
 
 ## Example Usage:
 ```python
@@ -23,4 +26,4 @@ async def find_lyrics(query: str):
         print(first.lyrics)
 ```
 
-[Obtain an API key](https://api.ksoft.si/) | [Join our Discord server](https://discord.gg/7bqdQd4)
+[Obtain an API key (Unavailable)](https://api.ksoft.si/) | [Documentation](https://py.docs.ksoft.si/) | [Join our Discord server](https://discord.gg/7bqdQd4)
