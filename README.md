@@ -1,16 +1,20 @@
-<img align="right" src="https://cdn.ksoft.si/images/ksoft-logo-text.png">
+[<img align="right" src="https://cdn.ksoft.si/images/ksoft-logo-text.png">](https://ksoft.si/)
 
 # KSoftAPI.py
-*The official Python Wrapper*
+*The official Python Wrapper for KSoft API*
 
 ## Install
-Installing via pip: `pip install ksoftapi`
+Installing via pip: 
+```
+pip install ksoftapi
+```
 
 ## Example Usage:
 ```python
 import ksoftapi
 
 kclient = ksoftapi.Client('Your API key here')
+
 
 async def find_lyrics(query: str):
     try:
@@ -22,4 +26,4 @@ async def find_lyrics(query: str):
         print(first.lyrics)
 ```
 
-[Obtain an API key](https://api.ksoft.si/) | [Join the Discord server](https://discordapp.com/invite/gRB2mNh)
+[Obtain an API key (Unavailable)](https://api.ksoft.si/) | [Documentation](https://py.docs.ksoft.si/) | [Join our Discord server](https://discord.gg/7bqdQd4)
